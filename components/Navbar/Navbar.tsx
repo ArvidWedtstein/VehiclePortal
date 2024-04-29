@@ -54,7 +54,7 @@ export default async function Navbar() {
             {user ? (
               <ProfileMenu>
                 <MenuItem component={"a"} href={`/profile/${user.id}`}>
-                  <Typography textAlign="center">Profile {user.id}</Typography>
+                  <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
                 <MenuItem onClick={signOut}>
                   <Typography textAlign="center">Logout</Typography>
