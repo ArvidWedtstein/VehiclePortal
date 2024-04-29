@@ -9,15 +9,15 @@ import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import ProfileMenu from "./Navbar/ProfileMenu";
+import ProfileMenu from "./ProfileMenu";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import MobilePagesMenu from "./Navbar/MobilePagesMenu";
+import MobilePagesMenu from "./MobilePagesMenu";
 import Link from "next/link";
 
 const pages = ["Products", "Pricing", "Blog"];
 
-export default async function NavbarDesktop() {
+export default async function Navbar() {
   const supabase = createClient();
 
   const {

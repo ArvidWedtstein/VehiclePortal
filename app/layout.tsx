@@ -2,7 +2,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../theme";
 import "./globals.css";
-import NavbarDesktop from "@/components/Navbar-Desktop";
+import Navbar from "@/components/Navbar/Navbar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -25,7 +25,7 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           {/*options={{ enableCssLayer: true }}*/}
           <ThemeProvider theme={theme}>
-            <NavbarDesktop />
+            <Navbar />
             {children}
           </ThemeProvider>
         </AppRouterCacheProvider>
