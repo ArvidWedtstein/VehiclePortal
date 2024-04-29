@@ -269,7 +269,7 @@ Deploying image to scaleway:
 
 1. build the docker image
    ```sh
-   docker build -t ArkDashboard .
+   docker build -t VehiclePortal .
    ```
 2. pull docker image
    ```sh
@@ -277,7 +277,7 @@ Deploying image to scaleway:
    ```
 3. tag the image
    ```sh
-   docker tag ArkDashboard ArvidWedtstein/VehiclePortal:latest
+   docker tag VehiclePortal ArvidWedtstein/VehiclePortal:latest
    ```
 4. push the image to docker hub
    ```sh
