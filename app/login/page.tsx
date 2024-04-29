@@ -1,13 +1,27 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { SubmitButton } from "./submit-button";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+  Link as MuiLink,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
+import { ChevronLeft } from "@mui/icons-material";
 
 export default function Login({
   searchParams,
 }: {
-  searchParams: { message: string };
+  searchParams: { message: string; mode: string };
 }) {
   const signIn = async (formData: FormData) => {
     "use server";
@@ -39,81 +53,148 @@ export default function Login({
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
+      // options: {
+      //   emailRedirectTo: `${origin}/auth/callback`,
+      // },
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return redirect(`/login?message=${error.message}`);
     }
 
-    return redirect("/login?message=Check email to continue sign in process");
+    return redirect("/login?message=yeey");
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
-      <Link
-        href="/"
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{" "}
+    <Container component="main" maxWidth="xs">
+      <MuiLink href="/" variant="body2">
+        <ChevronLeft />
         Back
-      </Link>
+      </MuiLink>
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Log In / Sign Up
+        </Typography>
+        <Box component="form" noValidate sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <Button
+                type="submit"
+                formAction={signIn}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Log In
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                type="submit"
+                formAction={signUp}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign Up
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
+          <Link
+            href="/"
+            className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>{" "}
+            Back
+          </Link>
 
-      <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          name="email"
-          placeholder="you@example.com"
-          required
-        />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
-        <SubmitButton
-          formAction={signIn}
-          className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing In..."
-        >
-          Sign In
-        </SubmitButton>
-        <SubmitButton
-          formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing Up..."
-        >
-          Sign Up
-        </SubmitButton>
-        {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
-        )}
-      </form>
-    </div>
+          <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
+            <label className="text-md" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="rounded-md px-4 py-2 bg-inherit border mb-6"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
+            <label className="text-md" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="rounded-md px-4 py-2 bg-inherit border mb-6"
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
+            <SubmitButton
+              formAction={signIn}
+              className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
+              pendingText="Signing In..."
+            >
+              Sign In
+            </SubmitButton>
+            <SubmitButton
+              formAction={signUp}
+              className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+              pendingText="Signing Up..."
+            >
+              Sign Up
+            </SubmitButton>
+            {searchParams?.message && (
+              <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+                {searchParams.message}
+              </p>
+            )}
+          </form>
+        </div>
+      </Box>
+    </Container>
   );
 }
