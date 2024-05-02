@@ -3,6 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../theme";
 import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
+import Head from "next/head";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AppRouterCacheProvider>
+          <Head>VehiclePortal</Head>
           <ThemeProvider theme={theme}>
             <Navbar />
             {children}

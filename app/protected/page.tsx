@@ -3,7 +3,6 @@ import { createClient } from "@/utils/supabase/server";
 import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
 import Header from "@/components/Header";
 import { redirect } from "next/navigation";
-import NavbarDesktop from "@/components/Navbar/Navbar";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
