@@ -2,24 +2,29 @@
 import {
   Box,
   ExtendButtonBase,
+  Paper,
   Tab,
+  TabOwnProps,
   TabProps,
   Tabs,
   TabsOwnProps,
+  TabsProps,
   TabTypeMap,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { Children, isValidElement, ReactNode, useState } from "react";
 
 interface VehicleTypesTabsProps {
   children?: React.ReactNode[];
 }
-export default function VehicleTypesTabs({ children }: VehicleTypesTabsProps) {
+
+export default function VehicleTypesTabs(props: VehicleTypesTabsProps) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
   return (
     <Box
       sx={{
@@ -29,32 +34,52 @@ export default function VehicleTypesTabs({ children }: VehicleTypesTabsProps) {
         height: 224,
       }}
     >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs"
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        {children}
-      </Tabs>
-      {/*TODO: fix*/}
-      {children?.map((child, index) => (
-        <TabPanel value={value} index={index} key={index}>
-          Item One
-        </TabPanel>
-      ))}
+      <Paper variant="elevation" elevation={1}>
+        <Tabs
+          orientation="vertical"
+          variant="scrollable"
+          value={value}
+          onChange={handleChange}
+          aria-label="Vehicle tabs"
+          sx={{ borderRight: 1, borderColor: "divider" }}
+        >
+          {
+            Children.map(props?.children, (child, index) => {
+              if (!child || !isValidElement(child)) return;
+              const {
+                children,
+                value,
+                label = "Vehicle",
+                ...other
+              } = child.props;
+
+              return <Tab label={label} key={index} value={index} {...other} />;
+            }) as ReactNode
+          }
+        </Tabs>
+      </Paper>
+
+      {Children.map(props?.children, (child, index) => {
+        if (!child || !isValidElement(child)) return;
+
+        const { children } = child.props;
+
+        return (
+          <TabPanel value={value} index={index}>
+            {children}
+          </TabPanel>
+        );
+      })}
     </Box>
   );
 }
 
-interface TabPanelProps {
+interface TabPanelProps extends Omit<TabOwnProps, "children"> {
   children?: React.ReactNode;
-  index: number;
-  value: number;
+  index?: number;
+  value?: number;
 }
-function TabPanel(props: TabPanelProps) {
+export function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -63,11 +88,18 @@ function TabPanel(props: TabPanelProps) {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
-      {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box
+          sx={{
+            position: "relative",
+            display: "flex",
+            maxHeight: "100%",
+            p: 0,
+            overflowY: "auto",
+          }}
+        >
+          {children}
         </Box>
       )}
     </div>

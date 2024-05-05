@@ -5,42 +5,28 @@ import Header from "@/components/Header";
 import { redirect } from "next/navigation";
 import {
   Box,
+  Card,
+  CardActionArea,
+  CardContent,
   Container,
   Grid,
+  List,
+  ListItem,
+  ListItemText,
+  ListSubheader,
   Paper,
   Tab,
-  Tabs,
+  TabOwnProps,
+  TabProps,
   Theme,
   Typography,
 } from "@mui/material";
-import VehicleTypesTabs from "@/components/Vehicles/VehicleTypesTabs";
+import VehicleTypesTabs, {
+  TabPanel,
+} from "@/components/Vehicles/VehicleTypesTabs";
+import VehiclesList from "@/components/Vehicles/VehiclesList";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-export default async function ProtectedPage() {
+export default async function VehiclesPage() {
   const supabase = createClient();
 
   const {
@@ -51,19 +37,29 @@ export default async function ProtectedPage() {
     return redirect("/login");
   }
 
+  // const { data, error } = await supabase.from("Profiles").select("*");
+
+  // const { data, error } = await supabase
+  //   .from("Vehicles")
+  //   .insert([{ name: "Honda", model: 1994, make: "Shadow" }])
+  //   .select();
+
+  // console.log(error, data);
+
   return (
     <Container maxWidth="xl" sx={{ my: 2 }}>
       <VehicleTypesTabs>
-        <Tab label="Item One" />
-        <Tab label="Item Two" />
-        <Tab label="Item Three" />
-        <Tab label="Item Four" />
-        <Tab label="Item Five" />
-        <Tab label="Item Six" />
-        <Tab label="Item Seven" />
+        <TabPanel label="Cars">
+          <VehiclesList />
+
+          <Paper sx={{ p: 4, height: "100%" }}>xs=4</Paper>
+        </TabPanel>
+        <TabPanel label="Motorcycles">
+          <VehiclesList />
+        </TabPanel>
       </VehicleTypesTabs>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} mt={1}>
         <Grid item xs={4}>
           <Paper sx={{ p: 4 }}>xs=4</Paper>
         </Grid>
@@ -74,8 +70,6 @@ export default async function ProtectedPage() {
           <Paper
             sx={{
               p: 4,
-              // backgroundColor: (theme) =>
-              //   theme.palette.mode === "dark" ? "#1A2027" : "#fff",
             }}
           >
             xs=4
