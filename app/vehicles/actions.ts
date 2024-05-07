@@ -9,10 +9,13 @@ export async function createVehicle(
   },
   formData: FormData
 ) {
+  const supabase = createClient();
   const formJson = Object.fromEntries((formData as FormData).entries());
   console.log("DAS FORMDATA", formJson);
 
-  return { message: "New Vehicle Created" };
+  const { error } = await supabase.from("Vehicles").insert(formJson);
+
+  return { message: error?.message || "New Vehicle Created" };
 }
 
 export async function getVehicleData({
