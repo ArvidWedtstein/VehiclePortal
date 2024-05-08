@@ -7,6 +7,8 @@ import {
   CardActionArea,
   CardContent,
   CardHeader,
+  CardMedia,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -43,15 +45,6 @@ export default function VehiclesList(props: VehiclesListProps) {
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   useEffect(() => {
     const fetchVehicles = async () => {
       const { data, error } = await supabase.from("Vehicles").select("*");
@@ -65,56 +58,29 @@ export default function VehiclesList(props: VehiclesListProps) {
     fetchVehicles();
   }, []);
   return (
-    <List style={{ overflowY: "auto", minWidth: "16rem" }}>
-      <VehicleDialog />
-
+    <>
       {vehicles.map((vehicle, idx) => (
-        <ListItem key={idx}>
-          <Card
-            style={{
-              width: "100%",
-              // borderColor:
-              //   activeCar === car.id ? Colors2.blueGrey["500"] : "",
-            }}
-            variant="outlined"
-          >
-            <CardHeader
-              title={vehicle.name}
-              subheader={vehicle.make}
-              action={
-                <IconButton
-                  aria-label="settings"
-                  aria-haspopup="true"
-                  onClick={handleClick}
-                  aria-controls={open ? "basic-menu" : undefined}
-                >
-                  <MoreVert />
-                </IconButton>
-              }
-            />
-
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={handleClose}>Edit</MenuItem>
-              <MenuItem onClick={handleClose}>Delete</MenuItem>
-            </Menu>
-            <CardActionArea>
+        <Grid item xs={12} md={3} key={`vehicle-${idx}`}>
+          <Card>
+            <CardActionArea href={`/vehicles/${vehicle.id}`}>
+              <CardMedia
+                component="img"
+                height="140"
+                image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
+                alt="green iguana"
+              />
               <CardContent>
-                <Typography variant="body2" color="textSecondary">
+                <Typography gutterBottom variant="h5" component="div">
+                  {vehicle.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
                   {vehicle.model}
                 </Typography>
               </CardContent>
             </CardActionArea>
           </Card>
-        </ListItem>
+        </Grid>
       ))}
-    </List>
+    </>
   );
 }

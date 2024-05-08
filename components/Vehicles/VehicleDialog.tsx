@@ -1,6 +1,6 @@
 "use client";
 
-import { Add } from "@mui/icons-material";
+import { Add, Close } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   DialogTitle,
   FormControl,
   Grid,
+  IconButton,
   InputAdornment,
   InputLabel,
   ListItem,
@@ -632,20 +633,26 @@ export default function VehicleDialog(props: VehicleDialogProps) {
 
   return (
     <Fragment>
-      <ListItem>
-        <Card
-          style={{
-            width: "100%",
-          }}
-          variant="elevation"
-        >
-          <CardActionArea onClick={handleClickOpen}>
-            <CardContent sx={{ display: "flex", justifyContent: "center" }}>
-              <Add />
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </ListItem>
+      <Card
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        variant="outlined"
+      >
+        <CardActionArea onClick={handleClickOpen} sx={{ height: "100%" }}>
+          <CardContent
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Add />
+          </CardContent>
+        </CardActionArea>
+      </Card>
 
       <Dialog
         open={open}
@@ -660,6 +667,17 @@ export default function VehicleDialog(props: VehicleDialogProps) {
         <DialogTitle>
           {props.vehicle_id ? "Edit Vehicle" : "New Vehicle"}
         </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <Close />
+        </IconButton>
         <DialogContent>
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => {

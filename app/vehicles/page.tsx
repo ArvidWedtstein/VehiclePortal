@@ -7,10 +7,15 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  CardMedia,
   Container,
+  Divider,
+  Drawer,
   Grid,
   List,
   ListItem,
+  ListItemButton,
+  ListItemIcon,
   ListItemText,
   ListSubheader,
   Paper,
@@ -18,12 +23,15 @@ import {
   TabOwnProps,
   TabProps,
   Theme,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import VehicleTypesTabs, {
   TabPanel,
 } from "@/components/Vehicles/VehicleTypesTabs";
 import VehiclesList from "@/components/Vehicles/VehiclesList";
+import { Add, Inbox, Mail } from "@mui/icons-material";
+import VehicleDialog from "@/components/Vehicles/VehicleDialog";
 
 export default async function VehiclesPage() {
   const supabase = createClient();
@@ -46,35 +54,23 @@ export default async function VehiclesPage() {
   // console.log(error, data);
 
   return (
-    <Container maxWidth="xl" sx={{ my: 2 }}>
-      <VehicleTypesTabs>
+    <Box sx={{ my: 2 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={3}>
+          <VehicleDialog />
+        </Grid>
+        <VehiclesList />
+      </Grid>
+
+      {/* <VehicleTypesTabs>
         <TabPanel label="Cars">
           <VehiclesList />
-
           <Paper sx={{ p: 4, height: "100%" }}>xs=4</Paper>
         </TabPanel>
         <TabPanel label="Motorcycles">
           <VehiclesList />
         </TabPanel>
-      </VehicleTypesTabs>
-
-      <Grid container spacing={2} mt={1}>
-        <Grid item xs={4}>
-          <Paper sx={{ p: 4 }}>xs=4</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper sx={{ p: 4 }}>xs=4</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper
-            sx={{
-              p: 4,
-            }}
-          >
-            xs=4
-          </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+      </VehicleTypesTabs> */}
+    </Box>
   );
 }
