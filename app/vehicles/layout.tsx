@@ -17,5 +17,5 @@ export default function VehiclesLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <Box sx={{ px: 2 }}>{children}</Box>;
+  return <Box sx={{ px: { xs: 1, md: 2 } }}>{children}</Box>;
 }

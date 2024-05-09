@@ -24,9 +24,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import VehicleTypesTabs, {
-  TabPanel,
-} from "@/components/Vehicles/VehicleTypesTabs";
 import VehiclesList from "@/components/Vehicles/VehiclesList";
 import VehicleDialog from "@/components/Vehicles/VehicleDialog";
 

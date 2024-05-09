@@ -21,9 +21,21 @@ import {
   ListItemText,
   Paper,
 } from "@mui/material";
-import { Inbox, Mail, Person, Restore } from "@mui/icons-material";
+import {
+  DirectionsCar,
+  Inbox,
+  Mail,
+  Person,
+  Restore,
+} from "@mui/icons-material";
 
-const pages = ["Vehicles"];
+const pages = [
+  {
+    name: "Vehicles",
+    href: "vehicles",
+    icon: DirectionsCar,
+  },
+];
 
 export default async function Sidebar() {
   const supabase = createClient();
@@ -68,13 +80,13 @@ export default async function Sidebar() {
         <Divider />
 
         <List sx={{ display: { xs: "none", md: "flex" } }}>
-          {pages.map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
+          {pages.map((page, index) => (
+            <ListItem key={`vehicle-${index}`} disablePadding>
+              <ListItemButton href={`/${page.href}`}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <Inbox /> : <Mail />}
+                  <page.icon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={page.name} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -93,9 +105,10 @@ export default async function Sidebar() {
         <BottomNavigation showLabels>
           {pages.map((page, index) => (
             <BottomNavigationAction
-              label={page}
-              icon={<Restore />}
+              label={page.name}
+              icon={<page.icon />}
               key={`page-${index}`}
+              href={`/${page.href}`}
             />
           ))}
           <BottomNavigationAction label="Favorites" icon={<Inbox />} />

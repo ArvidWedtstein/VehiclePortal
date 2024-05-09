@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" style={{ height: "100vh" }}>
+    <html lang="en" style={{ height: "100vh", overflowX: "hidden" }}>
       <body style={{ height: "100%" }}>
         <AppRouterCacheProvider>
           <Head>VehiclePortal</Head>
@@ -46,7 +46,7 @@ export default function RootLayout({
               <Grid item xs={0} md={2}>
                 <Sidebar />
               </Grid>
-              <Grid item xs={12} md={10}>
+              <Grid item xs={12} md={10} overflow={"auto"}>
                 {children}
               </Grid>
             </Grid>
