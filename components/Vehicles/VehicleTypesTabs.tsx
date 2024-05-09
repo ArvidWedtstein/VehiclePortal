@@ -1,17 +1,5 @@
 "use client";
-import {
-  Box,
-  ExtendButtonBase,
-  Paper,
-  Tab,
-  TabOwnProps,
-  TabProps,
-  Tabs,
-  TabsOwnProps,
-  TabsProps,
-  TabTypeMap,
-  Typography,
-} from "@mui/material";
+import { Box, Paper, Tab, TabOwnProps, Tabs } from "@mui/material";
 import { Children, isValidElement, ReactNode, useState } from "react";
 
 interface VehicleTypesTabsProps {

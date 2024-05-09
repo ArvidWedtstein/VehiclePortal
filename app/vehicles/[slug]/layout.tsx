@@ -3,6 +3,7 @@ import {
   AttachMoneyOutlined,
   Construction,
   ConstructionSharp,
+  DirectionsCar,
 } from "@mui/icons-material";
 import {
   Box,
@@ -29,6 +30,7 @@ export default function VehicleLayout({
     <Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs>
+          <Tab label="General" icon={<DirectionsCar />} iconPosition="start" />
           <Tab
             label="Service"
             icon={<ConstructionSharp />}

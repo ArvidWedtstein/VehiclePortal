@@ -1,39 +1,23 @@
-import { createClient } from "@/utils/supabase/client";
+"use client";
+
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import getEngines, { Engine } from "./Engines";
 
 export default function EnginesAutocomplete() {
-  const supabase = createClient();
-
-  type Engine = {
-    id: number;
-    created: string;
-    createdby_id?: string | null;
-    name?: string;
-    displacement?: number;
-    manufacturer?: string;
-    fuel_type?: string;
-    code?: string | null;
-    type?: string | null;
-    horsepower?: number;
-    kilowatt?: number;
-    valves?: number;
-    compression_ratio?: number;
-  };
-
   const [engines, setEngines] = useState<Engine[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchEngines = async () => {
-      const { data: engines, error } = await supabase
-        .from("VehicleEngines")
-        .select("*");
+      try {
+        const engines = await getEngines();
 
-      if (error) {
-        console.error(error);
+        setEngines(engines || []);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching EnginesLookup data:", error);
       }
-
-      setEngines(engines || []);
     };
 
     fetchEngines();
@@ -43,6 +27,7 @@ export default function EnginesAutocomplete() {
     <Autocomplete
       disablePortal
       id="engine"
+      loading={isLoading}
       options={engines.map((engine) => ({ label: engine?.name || "" }))}
       fullWidth
       renderInput={(params) => (

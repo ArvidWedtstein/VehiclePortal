@@ -92,7 +92,11 @@ export default async function Sidebar() {
       >
         <BottomNavigation showLabels>
           {pages.map((page, index) => (
-            <BottomNavigationAction label={page} icon={<Restore />} />
+            <BottomNavigationAction
+              label={page}
+              icon={<Restore />}
+              key={`page-${index}`}
+            />
           ))}
           <BottomNavigationAction label="Favorites" icon={<Inbox />} />
           {user ? (

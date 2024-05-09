@@ -1,6 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
-import Header from "@/components/Header";
 import { redirect } from "next/navigation";
 import {
   Box,
@@ -30,7 +28,6 @@ import VehicleTypesTabs, {
   TabPanel,
 } from "@/components/Vehicles/VehicleTypesTabs";
 import VehiclesList from "@/components/Vehicles/VehiclesList";
-import { Add, Inbox, Mail } from "@mui/icons-material";
 import VehicleDialog from "@/components/Vehicles/VehicleDialog";
 
 export default async function VehiclesPage() {
@@ -43,15 +40,6 @@ export default async function VehiclesPage() {
   if (!user) {
     return redirect("/login");
   }
-
-  // const { data, error } = await supabase.from("Profiles").select("*");
-
-  // const { data, error } = await supabase
-  //   .from("Vehicles")
-  //   .insert([{ name: "Honda", model: 1994, make: "Shadow" }])
-  //   .select();
-
-  // console.log(error, data);
 
   return (
     <Box sx={{ my: 2 }}>

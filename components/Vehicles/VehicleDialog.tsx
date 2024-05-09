@@ -19,7 +19,6 @@ import {
   ListItem,
   MenuItem,
   Select,
-  SelectChangeEvent,
   Step,
   StepLabel,
   Stepper,
@@ -27,8 +26,8 @@ import {
   Typography,
 } from "@mui/material";
 import { ChangeEvent, FormEvent, Fragment, useMemo, useState } from "react";
-import EnginesAutocomplete from "../Lookups/EnginesAutocomplete";
-import TransmissionsAutocomplete from "../Lookups/TransmissionsAutocomplete";
+import EnginesAutocomplete from "../Lookups/Engines/EnginesAutocomplete";
+import TransmissionsAutocomplete from "../Lookups/Transmissions/TransmissionsAutocomplete";
 import { createVehicle, getVehicleData } from "@/app/vehicles/actions";
 import { useFormState } from "react-dom";
 

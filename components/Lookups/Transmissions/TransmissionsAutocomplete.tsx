@@ -1,46 +1,35 @@
-import { createClient } from "@/utils/supabase/client";
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import getTransmissions, { Transmission } from "./Transmissions";
 
 export default function TransmissionsAutocomplete() {
-  const supabase = createClient();
-
-  type Transmission = {
-    id: number;
-    created: string;
-    createdby_id?: string | null;
-    name?: string;
-    gears?: number;
-    manufacturer?: string;
-    type?: string | null;
-  };
-
   const [transmissions, setTransmissions] = useState<Transmission[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEngines = async () => {
-      const { data: transmissions, error } = await supabase
-        .from("VehicleTransmissions")
-        .select("*");
+    const fetchTransmissions = async () => {
+      try {
+        const transmissions = await getTransmissions();
 
-      if (error) {
-        console.error(error);
+        setTransmissions(transmissions || []);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching TransmissionsLookup data:", error);
       }
-
-      setTransmissions(transmissions || []);
     };
 
-    fetchEngines();
+    fetchTransmissions();
   }, []);
 
   return (
     <Autocomplete
       disablePortal
-      id="engine"
+      id="transmission"
       options={transmissions.map((transmission) => ({
         label: transmission?.name || "",
       }))}
       fullWidth
+      loading={isLoading}
       renderInput={(params) => (
         <TextField
           {...params}
