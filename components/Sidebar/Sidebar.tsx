@@ -7,7 +7,7 @@ import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import ProfileMenu from "./../Navbar/ProfileMenu";
+import ProfileMenu from "./ProfileMenu";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import {
@@ -28,11 +28,12 @@ import {
   Person,
   Restore,
 } from "@mui/icons-material";
+import MobileMenu from "./MobileMenu";
 
 const pages = [
   {
     name: "Vehicles",
-    href: "vehicles",
+    href: "/vehicles",
     icon: DirectionsCar,
   },
 ];
@@ -92,41 +93,8 @@ export default async function Sidebar() {
           ))}
         </List>
       </Paper>
-      <Paper
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          display: { xs: "block", md: "none" },
-        }}
-        elevation={3}
-      >
-        <BottomNavigation showLabels>
-          {pages.map((page, index) => (
-            <BottomNavigationAction
-              label={page.name}
-              icon={<page.icon />}
-              key={`page-${index}`}
-              href={`/${page.href}`}
-            />
-          ))}
-          <BottomNavigationAction label="Favorites" icon={<Inbox />} />
-          {user ? (
-            <BottomNavigationAction
-              label="Profile"
-              icon={<Person />}
-              href={`/profile/${user.id}`}
-            />
-          ) : (
-            <BottomNavigationAction
-              label="Login"
-              icon={<Person />}
-              href={`/login`}
-            />
-          )}
-        </BottomNavigation>
-      </Paper>
+
+      <MobileMenu pages={pages} user={user} />
     </>
   );
 }

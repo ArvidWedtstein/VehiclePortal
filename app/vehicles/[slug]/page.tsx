@@ -1,13 +1,15 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { Box } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import Tabs, { TabPanel } from "@/components/Tabs";
 import {
   AttachMoneyOutlined,
   ConstructionSharp,
   DirectionsCar,
 } from "@mui/icons-material";
-import ServicesGrid from "@/components/Vehicles/ServicesGrid";
+import ServicesRealtime from "@/components/Vehicles/ServicesRealtime";
+import { Vehicle } from "@/components/Lookups/Vehicles/Vehicles";
+import Stat from "@/components/Stat";
 
 export default async function VehiclePage({
   params: { slug },
@@ -15,28 +17,32 @@ export default async function VehiclePage({
   params: { slug: string };
 }) {
   const supabase = createClient();
-  const { data } = await supabase
+  const { data: vehicle } = await supabase
     .from("Vehicles")
     .select()
     .match({ id: slug })
+    .returns<Vehicle[]>()
     .single();
 
-  if (!data) {
+  if (!vehicle) {
     notFound();
   }
 
   return (
     <Box>
+      <Grid sx={{ py: 2 }}>
+        <Stat variant="outlined" value={vehicle.name} unit=""></Stat>
+      </Grid>
       <Tabs>
         <TabPanel label="General" icon={<DirectionsCar />} iconPosition="start">
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+          <pre>{JSON.stringify(vehicle, null, 2)}</pre>
         </TabPanel>
         <TabPanel
           label="Service"
           icon={<ConstructionSharp />}
           iconPosition="start"
         >
-          <ServicesGrid />
+          <ServicesRealtime vehicle_id={vehicle.id} />
         </TabPanel>
         <TabPanel
           label="Expenses"

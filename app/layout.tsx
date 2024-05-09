@@ -2,9 +2,10 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../theme";
 import "./globals.css";
-import Navbar from "@/components/Navbar/Navbar";
-import Head from "next/head";
+import { Metadata } from "next";
 import {
+  AppBar,
+  Container,
   Divider,
   Drawer,
   Grid,
@@ -23,12 +24,12 @@ const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Vehicle DB",
+  title: "Vehicle Portal",
   description: "Tralalal",
 };
-// https://akfell-datautlevering.atlas.vegvesen.no/enkeltoppslag/kjoretoydata?kjennemerke=TF21166
+
 export default function RootLayout({
   children,
 }: {
@@ -38,9 +39,12 @@ export default function RootLayout({
     <html lang="en" style={{ height: "100vh", overflowX: "hidden" }}>
       <body style={{ height: "100%" }}>
         <AppRouterCacheProvider>
-          <Head>VehiclePortal</Head>
           <ThemeProvider theme={theme}>
-            <Navbar />
+            <AppBar position="static">
+              <Container maxWidth="xl">
+                <Toolbar disableGutters></Toolbar>
+              </Container>
+            </AppBar>
 
             <Grid container spacing={0}>
               <Grid item xs={0} md={2}>

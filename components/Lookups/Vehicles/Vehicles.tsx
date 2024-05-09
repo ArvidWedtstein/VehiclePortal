@@ -22,7 +22,10 @@ export type Vehicle = {
 
 export default async function getVehicles(): Promise<Vehicle[]> {
   const supabase = createClient();
-  const { data: vehicles, error } = await supabase.from("Vehicles").select("*");
+  const { data: vehicles, error } = await supabase
+    .from("Vehicles")
+    .select("*")
+    .returns<Vehicle[]>();
 
   if (error) {
     return notFound();
