@@ -50,7 +50,7 @@ export default function RootLayout({
               <Grid item xs={0} md={2}>
                 <Sidebar />
               </Grid>
-              <Grid item xs={12} md={10} overflow={"auto"}>
+              <Grid item xs={12} md={10} overflow={"auto"} pb={8}>
                 {children}
               </Grid>
             </Grid>

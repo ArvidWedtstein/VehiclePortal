@@ -14,6 +14,7 @@ import {
   Menu,
   MenuItem,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import {
   DataGrid,
@@ -26,14 +27,17 @@ import {
   GridRowModes,
   GridRowModesModel,
   GridSlots,
-  GridToolbar,
 } from "@mui/x-data-grid";
-import { ServiceLog } from "./ServicesRealtime";
+
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { ServiceType } from "../Lookups/ServiceTypes/ServiceTypes";
+import { ServiceType } from "../../../Lookups/ServiceTypes/ServiceTypes";
 import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
-import EditToolbar from "./ServicesGrid/EditToolbar";
+import EditToolbar from "./EditToolbar";
+import { ServiceLog } from "@/components/Lookups/ServiceLogs/ServiceLogs";
+import theme from "@/theme";
+import Link from "next/link";
+import ServiceDialog from "../ServiceDialog/ServiceDialog";
 
 interface ServicesRealtimeGridProps {
   serviceLogs: ServiceLog[];
@@ -44,6 +48,8 @@ export default function ServicesRealtimeGrid({
   serviceLogs,
   serviceTypes,
 }: ServicesRealtimeGridProps) {
+  const matches = useMediaQuery("(min-width:900px)");
+
   const supabase = createClient();
 
   const [services, setServices] =
@@ -90,8 +96,15 @@ export default function ServicesRealtimeGrid({
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id: GridRowId) => () => {
-    supabase.from("VehicleServiceLogs").delete().eq("id", id);
+  const handleDeleteClick = (id: GridRowId) => async () => {
+    const { error } = await supabase
+      .from("VehicleServiceLogs")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      throw error;
+    }
 
     setServices(services.filter((row) => row.id !== id));
   };
@@ -113,7 +126,6 @@ export default function ServicesRealtimeGrid({
       isNew?: boolean;
     };
 
-    console.log("handlerowupdate");
     setServices(
       services.map((row) => (row.id === newRow.id ? updatedRow : row))
     );
@@ -122,7 +134,6 @@ export default function ServicesRealtimeGrid({
       Object.entries(newRow).filter(([k]) => k !== "isNew" && k !== "id")
     );
 
-    console.log(row);
     const { error } = await supabase
       .from("VehicleServiceLogs")
       .update(row)
@@ -228,22 +239,69 @@ export default function ServicesRealtimeGrid({
     },
   ];
 
+  const [serviceLogId, setServiceLogId] = useState<{
+    id: number | null;
+    open: boolean;
+  }>({
+    id: null,
+    open: false,
+  });
+
   return (
     <Box>
-      <DataGrid
-        rows={services}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        onProcessRowUpdateError={handleError}
-        processRowUpdate={processRowUpdate}
-        slots={{ toolbar: EditToolbar as GridSlots["toolbar"] }}
-        slotProps={{
-          toolbar: { setServices, setRowModesModel },
+      <ServiceDialog
+        open={serviceLogId.open}
+        id={serviceLogId.id}
+        onClose={() => {
+          setServiceLogId({ open: false, id: null });
         }}
       />
+      {matches ? (
+        <DataGrid
+          rows={services}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          onProcessRowUpdateError={handleError}
+          processRowUpdate={processRowUpdate}
+          slots={{ toolbar: EditToolbar as GridSlots["toolbar"] }}
+          slotProps={{
+            toolbar: { setServices, setRowModesModel },
+          }}
+        />
+      ) : (
+        <Grid container spacing={1}>
+          {services.map((row) => (
+            <Grid item key={row.id} xs={12}>
+              <Card>
+                <CardActionArea
+                  onClick={() => {
+                    setServiceLogId(() => ({ open: true, id: row.id }));
+                  }}
+                >
+                  <CardHeader
+                    title={
+                      serviceTypes.find(
+                        (type) => type.id === row.service_type_id
+                      )?.name || ""
+                    }
+                    subheader={Intl.DateTimeFormat("en-GB").format(
+                      new Date(row.service_date || row.created_at)
+                    )}
+                  />
+                  <CardContent>
+                    <Typography variant="body2" color="text.secondary">
+                      test
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 }

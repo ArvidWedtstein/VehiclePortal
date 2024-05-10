@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper, useMediaQuery, useTheme } from "@mui/material";
 import Tabs, { TabPanel } from "@/components/Tabs";
 import {
   AttachMoneyOutlined,
   ConstructionSharp,
   DirectionsCar,
 } from "@mui/icons-material";
-import ServicesRealtime from "@/components/Vehicles/ServicesRealtime";
+import ServicesRealtime from "@/components/Vehicles/Services/ServicesGrid/ServicesRealtime";
 import { Vehicle } from "@/components/Lookups/Vehicles/Vehicles";
 import Stat from "@/components/Stat";
 

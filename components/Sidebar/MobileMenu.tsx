@@ -22,6 +22,7 @@ export default function MobileMenu({ pages, user }: MobileMenuProps) {
         left: 0,
         right: 0,
         display: { xs: "block", md: "none" },
+        zIndex: 1000,
         background: theme.palette.primary.main,
       }}
       elevation={3}
