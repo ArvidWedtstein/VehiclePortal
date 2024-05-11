@@ -1,31 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Container,
-  Divider,
-  Drawer,
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  Paper,
-  Tab,
-  TabOwnProps,
-  TabProps,
-  Theme,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import VehiclesList from "@/components/Vehicles/VehiclesList";
-import VehicleDialog from "@/components/Vehicles/VehicleDialog";
+import NewVehicleButton from "@/components/Vehicles/NewVehicleButton";
 
 export default async function VehiclesPage() {
   const supabase = createClient();
@@ -42,7 +19,7 @@ export default async function VehiclesPage() {
     <Box sx={{ my: 2 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
-          <VehicleDialog />
+          <NewVehicleButton />
         </Grid>
         <VehiclesList />
       </Grid>

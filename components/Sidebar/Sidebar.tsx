@@ -83,7 +83,7 @@ export default async function Sidebar() {
         <List sx={{ display: { xs: "none", md: "flex" } }}>
           {pages.map((page, index) => (
             <ListItem key={`vehicle-${index}`} disablePadding>
-              <ListItemButton href={`/${page.href}`}>
+              <ListItemButton href={page.href}>
                 <ListItemIcon>
                   <page.icon />
                 </ListItemIcon>

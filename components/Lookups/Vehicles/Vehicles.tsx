@@ -20,11 +20,18 @@ export type Vehicle = {
   vehicle_identification_number?: string | null;
 };
 
-export default async function getVehicles(): Promise<Vehicle[]> {
+export default async function getVehicles(
+  filters?:
+    | {
+        id?: number;
+      }
+    | undefined
+): Promise<Vehicle[]> {
   const supabase = createClient();
   const { data: vehicles, error } = await supabase
     .from("Vehicles")
     .select("*")
+    .match(filters || {})
     .returns<Vehicle[]>();
 
   if (error) {

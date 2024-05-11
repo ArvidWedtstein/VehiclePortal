@@ -1,5 +1,6 @@
 "use server";
 
+import { FormData } from "@/components/Vehicles/VehicleDialog/VehicleDialog";
 import { createClient } from "@/utils/supabase/server";
 import { Vehicle } from "vehicle";
 
@@ -10,10 +11,9 @@ export async function createVehicle(
   formData: FormData
 ) {
   const supabase = createClient();
-  const formJson = Object.fromEntries((formData as FormData).entries());
-  console.log("DAS FORMDATA", formJson);
+  console.log("DAS FORMDATA", formData);
 
-  const { error } = await supabase.from("Vehicles").insert(formJson);
+  const { error } = await supabase.from("Vehicles").insert(formData);
 
   return { message: error?.message || "New Vehicle Created" };
 }

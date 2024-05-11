@@ -1,56 +1,46 @@
 "use client";
 
-import { Add, Close } from "@mui/icons-material";
 import {
   Box,
   Button,
-  Card,
-  CardActionArea,
-  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
-  Grid,
   IconButton,
-  InputAdornment,
-  InputLabel,
-  ListItem,
-  MenuItem,
-  Select,
-  Step,
-  StepLabel,
-  Stepper,
-  TextField,
-  Typography,
 } from "@mui/material";
-import { ChangeEvent, FormEvent, Fragment, useMemo, useState } from "react";
-import EnginesAutocomplete from "../Lookups/Engines/EnginesAutocomplete";
-import TransmissionsAutocomplete from "../Lookups/Transmissions/TransmissionsAutocomplete";
+import VehicleForm from "./VehicleForm";
+import { Close } from "@mui/icons-material";
 import { createVehicle, getVehicleData } from "@/app/vehicles/actions";
-import { useFormState } from "react-dom";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import getVehicles from "@/components/Lookups/Vehicles/Vehicles";
+
+export type FormData = {
+  name?: string | null;
+  registernumber: string | null;
+  vin?: string | null;
+  displacement?: number | null;
+  horsepower?: number | null;
+  kilowatt?: number | null;
+  valves?: number | null;
+  fueltype?: string | null;
+  engine_type?: string | null;
+  transmission_type?: string | null;
+  transmission_manufacturer: null;
+  gears?: number | null;
+};
 
 type VehicleDialogProps = {
-  vehicle_id?: number;
+  id?: number | null | undefined;
+  open?: boolean;
+  onClose?: () => void;
 };
-export default function VehicleDialog(props: VehicleDialogProps) {
-  const [open, setOpen] = useState(false);
 
-  type FormData = {
-    name?: string | null;
-    registernumber: string | null;
-    vin?: string | null;
-    displacement?: number | null;
-    horsepower?: number | null;
-    kilowatt?: number | null;
-    valves?: number | null;
-    fueltype?: string | null;
-    engine_type?: string | null;
-    transmission_type?: string | null;
-    transmission_manufacturer: null;
-    gears?: number | null;
-  };
+export default function VehicleDialog({
+  id,
+  open = false,
+  onClose,
+}: VehicleDialogProps) {
   const [formData, setFormData] = useState<FormData>({
     name: null,
     registernumber: null,
@@ -77,37 +67,17 @@ export default function VehicleDialog(props: VehicleDialogProps) {
     []
   );
 
-  const [state, formAction] = useFormState(createVehicle, { message: "" });
+  useEffect(() => {
+    const getVehicle = async () => {
+      const vehicle = await getVehicles({ id: id || -1 });
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+      setFormData((prev) => ({ ...prev, ...vehicle[0] }));
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-    setActiveStep(0);
-    setSkipped(new Set<number>());
-
-    state.message = "";
-
-    setFormData({
-      name: null,
-      registernumber: null,
-      vin: null,
-      displacement: null,
-      horsepower: null,
-      kilowatt: null,
-      valves: null,
-      fueltype: null,
-      engine_type: null,
-      transmission_type: null,
-      transmission_manufacturer: null,
-      gears: null,
-    });
-  };
+    getVehicle();
+  }, []);
 
   const steps = ["General Data", "Engine", "Transmission"];
-
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
 
@@ -119,7 +89,7 @@ export default function VehicleDialog(props: VehicleDialogProps) {
     return skipped.has(step);
   };
 
-  const handleNext = async (event: FormEvent) => {
+  const handleNext = async () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -127,20 +97,14 @@ export default function VehicleDialog(props: VehicleDialogProps) {
     }
 
     if (activeStep === 0) {
-      const formData = new FormData((event.target as HTMLButtonElement)!.form!);
-
       if (
-        !/^[A-ZÆØÅ]{2}\d{5}$/.test(
-          formData.get("registernumber")?.toString() || ""
-        )
+        !/^[A-ZÆØÅ]{2}\d{5}$/.test(formData.registernumber?.toString() || "")
       ) {
-        return (state.message = "Register Number is invalid");
+        return alert("Register Number is invalid");
       }
 
-      state.message = "";
-
       const res = await getVehicleData({
-        registernumber: formData.get("registernumber")?.toString() || "",
+        registernumber: formData.registernumber?.toString() || "",
       });
 
       console.log("Kjøretøy", res);
@@ -586,6 +550,7 @@ export default function VehicleDialog(props: VehicleDialogProps) {
       };
 
       const vehicle = kjoretoy.kjoretoydataListe[0]; //res.kjoretoydataListe[0];
+
       setFormData((prev) => ({
         ...prev,
         vin: vehicle.kjoretoyId.understellsnummer,
@@ -606,8 +571,12 @@ export default function VehicleDialog(props: VehicleDialogProps) {
 
     // Finish
     if (activeStep >= steps.length - 1) {
-      let form = (event.target as HTMLButtonElement)?.form;
-      form?.requestSubmit();
+      try {
+        await createVehicle({ message: "" }, formData);
+        onClose?.();
+      } catch (error) {
+        alert(error);
+      }
     }
   };
 
@@ -630,297 +599,73 @@ export default function VehicleDialog(props: VehicleDialogProps) {
     });
   };
 
+  const handleClose = () => {
+    setFormData({
+      name: null,
+      registernumber: null,
+      vin: null,
+      displacement: null,
+      horsepower: null,
+      kilowatt: null,
+      valves: null,
+      fueltype: null,
+      engine_type: null,
+      transmission_type: null,
+      transmission_manufacturer: null,
+      gears: null,
+    });
+
+    onClose?.();
+  };
+
   return (
-    <Fragment>
-      <Card
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-        variant="outlined"
-      >
-        <CardActionArea onClick={handleClickOpen} sx={{ height: "100%" }}>
-          <CardContent
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Add />
-          </CardContent>
-        </CardActionArea>
-      </Card>
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        maxWidth="xl"
-        fullWidth
-        PaperProps={{
-          component: "form",
-          action: formAction,
+    <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
+      <DialogTitle>{id ? "Edit Vehicle" : "New Vehicle"}</DialogTitle>
+      <IconButton
+        aria-label="close"
+        onClick={handleClose}
+        sx={{
+          position: "absolute",
+          right: 8,
+          top: 8,
         }}
       >
-        <DialogTitle>
-          {props.vehicle_id ? "Edit Vehicle" : "New Vehicle"}
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-          }}
-        >
-          <Close />
-        </IconButton>
-        <DialogContent>
-          <Stepper activeStep={activeStep}>
-            {steps.map((label, index) => {
-              const stepProps: { completed?: boolean } = {};
-              const labelProps: {
-                optional?: React.ReactNode;
-              } = {};
-              if (isStepOptional(index)) {
-                labelProps.optional = (
-                  <Typography variant="caption">Optional</Typography>
-                );
-              }
-              if (isStepSkipped(index)) {
-                stepProps.completed = false;
-              }
-              return (
-                <Step key={label} {...stepProps}>
-                  <StepLabel {...labelProps}>{label}</StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
-
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoFocus
-                required
-                margin="dense"
-                id="name"
-                name="name"
-                label="Name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                margin="dense"
-                id="registernumber"
-                name="registernumber"
-                label="Register Number"
-                type="text"
-                value={formData.registernumber}
-                onChange={handleChange}
-                fullWidth
-                required
-                variant="standard"
-                placeholder="AB 12345"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                margin="dense"
-                id="vin"
-                name="vin"
-                label="Vehicle Identification Number (VIN)"
-                type="text"
-                value={formData.vin}
-                onChange={handleChange}
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <EnginesAutocomplete />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                margin="dense"
-                id="displacement"
-                name="displacement"
-                label="Displacement"
-                type="text"
-                fullWidth
-                value={formData.displacement}
-                onChange={handleChange}
-                variant="standard"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">ccm</InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                margin="dense"
-                id="horsepower"
-                name="horsepower"
-                label="Horsepower"
-                type="number"
-                fullWidth
-                value={formData.horsepower}
-                onChange={handleChange}
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                margin="dense"
-                id="kilowatt"
-                name="kilowatt"
-                label="Kilowatt"
-                type="number"
-                fullWidth
-                value={formData.kilowatt}
-                onChange={handleChange}
-                variant="standard"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">kW</InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <FormControl fullWidth variant="standard" margin="dense">
-                <InputLabel id="fuel-type-label">Fuel</InputLabel>
-                <Select
-                  labelId="fuel-type-label"
-                  id="fuel-type"
-                  label="Fuel"
-                  name="fueltype"
-                  value={formData.fueltype}
-                  onSelect={handleChange}
-                >
-                  <MenuItem value={"gasoline"}>Gasoline</MenuItem>
-                  <MenuItem value={"diesel"}>Diesel</MenuItem>
-                  <MenuItem value={"Jet Fuel"}>Jet Fuel</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-              <FormControl fullWidth variant="standard" margin="dense">
-                <InputLabel id="type-label">Type</InputLabel>
-                <Select
-                  labelId="type-label"
-                  id="fuel-type"
-                  label="Type"
-                  name="engine_type"
-                  value={formData.engine_type}
-                  onSelect={handleChange}
-                >
-                  <MenuItem value={"inline-4"}>Inline 4</MenuItem>
-                  <MenuItem value={"V6"}>V6</MenuItem>
-                  <MenuItem value={"V8"}>V8</MenuItem>
-                  <MenuItem value={"V12"}>V12</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                margin="dense"
-                id="valves"
-                name="valves"
-                label="Valves"
-                type="number"
-                value={formData.valves}
-                onChange={handleChange}
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TransmissionsAutocomplete />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                margin="dense"
-                id="gear"
-                name="gear"
-                label="Gears"
-                type="number"
-                fullWidth
-                value={formData.gears}
-                onChange={handleChange}
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                margin="dense"
-                id="transmission_manufacturer"
-                name="transmission_manufacturer"
-                label="Manufacturer"
-                type="text"
-                fullWidth
-                value={formData.transmission_manufacturer}
-                onChange={handleChange}
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <FormControl fullWidth variant="standard" margin="dense">
-                <InputLabel id="type-label">Type</InputLabel>
-                <Select
-                  labelId="type-label"
-                  id="fuel-type"
-                  label="Type"
-                  name="transmission-type"
-                  value={formData.transmission_type}
-                  onSelect={handleChange}
-                >
-                  <MenuItem value={"M"}>Manual</MenuItem>
-                  <MenuItem value={"A"}>Automatic</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-
-          <Typography aria-live="polite" className="sr-only" role="status">
-            {state.message}
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ justifyContent: "" }}>
-          <Button
-            color="inherit"
-            disabled={activeStep === 0 || activeStep === steps.length}
-            onClick={handleBack}
-            sx={{ mr: 1 }}
-          >
-            Back
-          </Button>
-          <Box sx={{ flex: "1 1 auto" }} />
-          {isStepOptional(activeStep) && (
-            <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-              Skip
+        <Close />
+      </IconButton>
+      {open && (
+        <>
+          <DialogContent>
+            <VehicleForm
+              id={id || undefined}
+              steps={steps}
+              activeStep={activeStep}
+              isStepOptional={isStepOptional}
+              isStepSkipped={isStepSkipped}
+              formData={formData}
+              handleChange={handleChange}
+            />
+          </DialogContent>
+          <DialogActions sx={{ justifyContent: "" }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0 || activeStep === steps.length}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
             </Button>
-          )}
-          <Button onClick={handleNext}>
-            {activeStep >= steps.length - 1 ? "Finish" : "Next"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Fragment>
+            <Box sx={{ flex: "1 1 auto" }} />
+            {isStepOptional(activeStep) && (
+              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                Skip
+              </Button>
+            )}
+            <Button onClick={handleNext}>
+              {activeStep >= steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+          </DialogActions>
+        </>
+      )}
+    </Dialog>
   );
 }
