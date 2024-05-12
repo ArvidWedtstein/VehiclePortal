@@ -114,24 +114,29 @@ export default async function VehiclePage({
                   sx={{ textTransform: "capitalize" }}
                   label={vehicle?.VehicleTransmissions?.gears}
                   size="small"
-                  icon={<GearShifter gears={6} />}
+                  icon={
+                    <GearShifter gears={vehicle?.VehicleTransmissions?.gears} />
+                  }
                 />
                 <Chip
                   variant="outlined"
-                  label={vehicle?.VehicleEngines?.displacement}
+                  label={
+                    Math.round(vehicle?.VehicleEngines?.displacement || 0) /
+                    1000
+                  }
                   size="small"
                   icon={<p>ccm</p>}
                 />
               </Stack>
             </CardContent>
           </Card>
-          <pre>{JSON.stringify(vehicle, null, 2)}</pre>
           <Stat
             header={"tralala"}
             value={124}
             icon={<Add />}
             description={"tralal"}
           />
+          <pre>{JSON.stringify(vehicle, null, 2)}</pre>
         </TabPanel>
         <TabPanel
           label="Service"
