@@ -18,6 +18,9 @@ export type Vehicle = {
   body_type?: string;
   register_number?: string;
   vehicle_identification_number?: string | null;
+  engine_id?: number;
+  transmission_id?: number;
+  eu_control_date?: string;
 };
 
 export default async function getVehicles(

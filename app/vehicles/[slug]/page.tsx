@@ -10,8 +10,11 @@ import {
   List,
   ListItem,
   ListItemText,
+  MenuItem,
   Paper,
+  Select,
   Stack,
+  TextField,
   Typography,
   useMediaQuery,
   useTheme,
@@ -33,6 +36,7 @@ import Stat from "@/components/Stat";
 import { Engine } from "@/components/Lookups/Engines/Engines";
 import { Transmission } from "@/components/Lookups/Transmissions/Transmissions";
 import GearShifter from "@/components/Icons/GearShifter";
+import ExpensesRealtime from "@/components/Vehicles/Expenses/ExpensesGrid/ExpensesRealtime";
 
 export default async function VehiclePage({
   params: { slug },
@@ -95,7 +99,7 @@ export default async function VehiclePage({
         <TabPanel label="General" icon={<DirectionsCar />} iconPosition="start">
           <Card variant="outlined" sx={{ mt: 3 }}>
             <CardContent>
-              <Stack direction="row" spacing={2}>
+              <Stack direction="row" spacing={2} alignItems={"center"}>
                 <Chip
                   variant="outlined"
                   label={vehicle.drivetrain}
@@ -127,6 +131,13 @@ export default async function VehiclePage({
                   size="small"
                   icon={<p>ccm</p>}
                 />
+                {vehicle?.eu_control_date && (
+                  <Chip
+                    variant="outlined"
+                    label={vehicle?.eu_control_date || ""}
+                    size="small"
+                  />
+                )}
               </Stack>
             </CardContent>
           </Card>
@@ -150,7 +161,7 @@ export default async function VehiclePage({
           icon={<AttachMoneyOutlined />}
           iconPosition="start"
         >
-          <p>expenses</p>
+          <ExpensesRealtime vehicle_id={vehicle.id} />
         </TabPanel>
       </Tabs>
     </Box>
