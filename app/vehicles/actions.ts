@@ -11,9 +11,13 @@ export async function createVehicle(
   formData: FormData
 ) {
   const supabase = createClient();
-  console.log("DAS FORMDATA", formData);
 
-  const { error } = await supabase.from("Vehicles").insert(formData);
+  const { error } = await supabase.from("Vehicles").insert({
+    name: formData.name,
+    vehicle_identification_number: formData.vin,
+    register_number: formData.register_number,
+    model: formData.model,
+  });
 
   return { message: error?.message || "New Vehicle Created" };
 }

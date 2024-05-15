@@ -16,6 +16,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Step,
   StepLabel,
   Stepper,
@@ -91,11 +92,11 @@ export default function VehicleForm({
           <Grid item xs={6}>
             <TextField
               margin="dense"
-              id="registernumber"
-              name="registernumber"
+              id="register_number"
+              name="register_number"
               label="Register Number"
               type="text"
-              value={formData.registernumber}
+              value={formData.register_number}
               onChange={handleChange}
               fullWidth
               required
@@ -111,6 +112,32 @@ export default function VehicleForm({
               label="Vehicle Identification Number (VIN)"
               type="text"
               value={formData.vin}
+              onChange={handleChange}
+              fullWidth
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              margin="dense"
+              id="make"
+              name="make"
+              label="Make"
+              type="text"
+              value={formData.make}
+              onChange={handleChange}
+              fullWidth
+              variant="standard"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              margin="dense"
+              id="model"
+              name="model"
+              label="Model"
+              type="text"
+              value={formData.model}
               onChange={handleChange}
               fullWidth
               variant="standard"
@@ -132,7 +159,7 @@ export default function VehicleForm({
               label="Displacement"
               type="text"
               fullWidth
-              value={formData.displacement}
+              value={formData.VehicleEngines?.displacement}
               onChange={handleChange}
               variant="standard"
               InputProps={{
@@ -150,7 +177,7 @@ export default function VehicleForm({
               label="Horsepower"
               type="number"
               fullWidth
-              value={formData.horsepower}
+              value={formData.VehicleEngines?.horsepower}
               onChange={handleChange}
               variant="standard"
             />
@@ -163,7 +190,7 @@ export default function VehicleForm({
               label="Kilowatt"
               type="number"
               fullWidth
-              value={formData.kilowatt}
+              value={formData.VehicleEngines?.kilowatt}
               onChange={handleChange}
               variant="standard"
               InputProps={{
@@ -174,39 +201,45 @@ export default function VehicleForm({
             />
           </Grid>
           <Grid item xs={4}>
-            <FormControl fullWidth variant="standard" margin="dense">
-              <InputLabel id="fuel-type-label">Fuel</InputLabel>
-              <Select
-                labelId="fuel-type-label"
-                id="fuel-type"
-                label="Fuel"
-                name="fueltype"
-                value={formData.fueltype}
-                onSelect={handleChange}
-              >
-                <MenuItem value={"gasoline"}>Gasoline</MenuItem>
-                <MenuItem value={"diesel"}>Diesel</MenuItem>
-                <MenuItem value={"Jet Fuel"}>Jet Fuel</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              margin="dense"
+              id="fuel_type"
+              name="fuel_type"
+              select
+              value={formData.VehicleEngines?.fuel_type}
+              onChange={handleChange}
+              label="Fuel"
+              fullWidth
+              type="text"
+              variant="standard"
+            >
+              <MenuItem value={"gasoline"}>Gasoline</MenuItem>
+              <MenuItem value={"diesel"}>Diesel</MenuItem>
+              <MenuItem value={"jet_fuel"}>Jet Fuel</MenuItem>
+              <MenuItem value={"hybrid"}>Hybrid</MenuItem>
+              <MenuItem value={"electricity"}>Jet Fuel</MenuItem>
+            </TextField>
           </Grid>
           <Grid item xs={4}>
-            <FormControl fullWidth variant="standard" margin="dense">
-              <InputLabel id="type-label">Type</InputLabel>
-              <Select
-                labelId="type-label"
-                id="fuel-type"
-                label="Type"
-                name="engine_type"
-                value={formData.engine_type}
-                onSelect={handleChange}
-              >
-                <MenuItem value={"inline-4"}>Inline 4</MenuItem>
-                <MenuItem value={"V6"}>V6</MenuItem>
-                <MenuItem value={"V8"}>V8</MenuItem>
-                <MenuItem value={"V12"}>V12</MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              margin="dense"
+              id="engine_type"
+              name="engine_type"
+              select
+              value={formData.engine_type}
+              onChange={handleChange}
+              label="Type"
+              fullWidth
+              type="text"
+              variant="standard"
+            >
+              <MenuItem value={"1"}>1 Cylinder</MenuItem>
+              <MenuItem value={"2"}>2 Cylinder</MenuItem>
+              <MenuItem value={"inline-4"}>Inline 4</MenuItem>
+              <MenuItem value={"V6"}>V6</MenuItem>
+              <MenuItem value={"V8"}>V8</MenuItem>
+              <MenuItem value={"V12"}>V12</MenuItem>
+            </TextField>
           </Grid>
           <Grid item xs={4}>
             <TextField

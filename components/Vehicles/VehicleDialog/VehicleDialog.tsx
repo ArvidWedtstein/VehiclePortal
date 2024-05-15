@@ -14,17 +14,23 @@ import { Close } from "@mui/icons-material";
 import { createVehicle, getVehicleData } from "@/app/vehicles/actions";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import getVehicles from "@/components/Lookups/Vehicles/Vehicles";
+import { Engine } from "@/components/Lookups/Engines/Engines";
 
 export type FormData = {
   name?: string | null;
-  registernumber: string | null;
+  register_number: string | null;
   vin?: string | null;
+  make?: string | null;
+  model?: number | null;
+  registered_date?: string | null;
+  eu_control_date?: string | null;
   displacement?: number | null;
   horsepower?: number | null;
   kilowatt?: number | null;
   valves?: number | null;
-  fueltype?: string | null;
+  fuel_type?: string | null;
   engine_type?: string | null;
+  VehicleEngines?: Partial<Engine>;
   transmission_type?: string | null;
   transmission_manufacturer: null;
   gears?: number | null;
@@ -43,13 +49,13 @@ export default function VehicleDialog({
 }: VehicleDialogProps) {
   const [formData, setFormData] = useState<FormData>({
     name: null,
-    registernumber: null,
+    register_number: null,
     vin: null,
     displacement: null,
     horsepower: null,
     kilowatt: null,
     valves: null,
-    fueltype: null,
+    fuel_type: null,
     engine_type: null,
     transmission_type: null,
     transmission_manufacturer: null,
@@ -59,6 +65,8 @@ export default function VehicleDialog({
   const handleChange = useMemo(
     () => (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
+
+      console.log(name, value);
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
@@ -98,13 +106,16 @@ export default function VehicleDialog({
 
     if (activeStep === 0) {
       if (
-        !/^[A-ZÆØÅ]{2}\d{5}$/.test(formData.registernumber?.toString() || "")
+        !/^[A-ZÆØÅ]{2}\d{5}$/.test(
+          formData.register_number?.toString() || ""
+        ) &&
+        !/^[A-ZÆØÅ]{2}\d{4}$/.test(formData.register_number?.toString() || "")
       ) {
         return alert("Register Number is invalid");
       }
 
       const res = await getVehicleData({
-        registernumber: formData.registernumber?.toString() || "",
+        registernumber: formData.register_number?.toString() || "",
       });
 
       console.log("Kjøretøy", res);
@@ -549,30 +560,40 @@ export default function VehicleDialog({
         ],
       };
 
-      const vehicle = kjoretoy.kjoretoydataListe[0]; //res.kjoretoydataListe[0];
+      const vehicle = res.kjoretoydataListe[0];
 
       setFormData((prev) => ({
         ...prev,
         vin: vehicle.kjoretoyId.understellsnummer,
         transmission_type:
           vehicle.godkjenning.tekniskGodkjenning.tekniskeData.motorOgDrivverk
-            .girkassetype.kodeVerdi,
-        displacement:
-          vehicle.godkjenning.tekniskGodkjenning.tekniskeData.motorOgDrivverk
-            .motor[0].slagvolum,
-        fueltype:
-          vehicle.godkjenning.tekniskGodkjenning.tekniskeData.motorOgDrivverk
-            .motor[0].drivstoff[0].drivstoffKode.kodeNavn,
+            ?.girkassetype?.kodeVerdi || null,
+        // VehicleEngines: {
+        //   displacement:
+        //     vehicle.godkjenning.tekniskGodkjenning.tekniskeData.motorOgDrivverk
+        //       ?.motor[0].slagvolum || null,
+        //       kilowatt:
+        //         vehicle.godkjenning.tekniskGodkjenning.tekniskeData.motorOgDrivverk
+        //           ?.motor[0].drivstoff[0].maksNettoEffekt,
+        //       fuel_type:
+        //         vehicle.godkjenning.tekniskGodkjenning.tekniskeData.motorOgDrivverk
+        //           ?.motor[0].drivstoff[0].drivstoffKode.kodeNavn,
+        // },
       }));
     }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep((prevActiveStep) =>
+      prevActiveStep >= steps.length ? steps.length : prevActiveStep + 1
+    );
     setSkipped(newSkipped);
 
     // Finish
-    if (activeStep >= steps.length - 1) {
+
+    console.log(activeStep, steps.length);
+    if (activeStep + 1 >= steps.length) {
       try {
-        await createVehicle({ message: "" }, formData);
+        const { message } = await createVehicle({ message: "" }, formData);
+        alert(message);
         onClose?.();
       } catch (error) {
         alert(error);
@@ -602,18 +623,21 @@ export default function VehicleDialog({
   const handleClose = () => {
     setFormData({
       name: null,
-      registernumber: null,
+      register_number: null,
       vin: null,
       displacement: null,
       horsepower: null,
       kilowatt: null,
       valves: null,
-      fueltype: null,
+      fuel_type: null,
       engine_type: null,
       transmission_type: null,
       transmission_manufacturer: null,
       gears: null,
     });
+
+    setActiveStep(0);
+    setSkipped(new Set<number>());
 
     onClose?.();
   };
@@ -656,7 +680,12 @@ export default function VehicleDialog({
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
             {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+              <Button
+                color="inherit"
+                onClick={handleSkip}
+                sx={{ mr: 1 }}
+                disabled={activeStep >= steps.length - 1}
+              >
                 Skip
               </Button>
             )}
