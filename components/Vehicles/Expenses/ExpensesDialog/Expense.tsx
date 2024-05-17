@@ -31,7 +31,8 @@ export default function Expense({ id }: ExpenseProps) {
 
   useEffect(() => {
     const getExpense = async () => {
-      const expense = await getExpenses({ id: id || -1 });
+      if (!id) return;
+      const expense = await getExpenses({ id: id });
 
       setExpense(id ? expense[0] : null);
     };

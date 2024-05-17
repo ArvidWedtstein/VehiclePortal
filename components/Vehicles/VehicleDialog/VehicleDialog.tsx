@@ -77,7 +77,8 @@ export default function VehicleDialog({
 
   useEffect(() => {
     const getVehicleData = async () => {
-      const vehicle = await getVehicle({ id: id || -1 });
+      if (!id) return;
+      const vehicle = await getVehicle({ id: id });
       setFormData((prev) => ({ ...prev, ...vehicle }));
     };
 

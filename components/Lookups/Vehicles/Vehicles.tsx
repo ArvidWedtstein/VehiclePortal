@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
+import { Engine } from "../Engines/Engines";
 
 export type Vehicle = {
   id: number;
@@ -21,6 +22,7 @@ export type Vehicle = {
   engine_id?: number;
   transmission_id?: number;
   eu_control_date?: string;
+  VehicleEngines?: Engine;
 };
 
 type ColumnsToReturn<T, C> = C extends "*" ? T : Pick<T, Extract<C, keyof T>>;

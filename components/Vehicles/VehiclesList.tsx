@@ -25,10 +25,10 @@ export default async function VehiclesList(props: VehiclesListProps) {
       <Card>
         <CardActionArea href={`/vehicles/${vehicle.id}`}>
           <CardMedia
-            component="img"
+            component={"img"}
             height="140"
-            image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
-            alt="green iguana"
+            src="/images/DSC01917.jpg"
+            alt="haudi"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">

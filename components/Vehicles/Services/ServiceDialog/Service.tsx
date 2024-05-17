@@ -26,7 +26,9 @@ export default function Service({ id }: ServiceProps) {
 
   useEffect(() => {
     const getServiceLog = async () => {
-      const serviceLog = await getServiceLogs({ id: id || -1 });
+      if (!id) return;
+
+      const serviceLog = await getServiceLogs({ id: id });
 
       setServiceLog(id ? serviceLog[0] : null);
     };

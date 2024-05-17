@@ -34,6 +34,7 @@ import Stat from "@/components/Stat";
 import { Engine } from "@/components/Lookups/Engines/Engines";
 import { Transmission } from "@/components/Lookups/Transmissions/Transmissions";
 import GearShifter from "@/components/Icons/GearShifter";
+import Car from "@/components/Icons/Car";
 const ServicesRealtime = lazy(
   () => import("@/components/Vehicles/Services/ServicesGrid/ServicesRealtime")
 );
@@ -104,11 +105,7 @@ export default async function VehiclePage({
   return (
     <Box>
       <Tabs>
-        <TabPanel
-          label="General"
-          icon={<DirectionsCarFilledOutlined />}
-          iconPosition="start"
-        >
+        <TabPanel label="General" icon={<Car />} iconPosition="start">
           <Card variant="outlined" sx={{ mt: 3 }}>
             <CardContent>
               <Stack direction="row" spacing={2} alignItems={"center"}>

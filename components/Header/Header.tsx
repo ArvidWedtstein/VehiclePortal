@@ -2,10 +2,11 @@
 
 import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
 import KeyboardBackspaceRoundedIcon from "@mui/icons-material/KeyboardBackspaceRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { headers } from "next/headers";
 import { getVehicle } from "../Lookups/Vehicles/Vehicles";
+import { CloseRounded, KeyboardBackspaceRounded } from "@mui/icons-material";
+import Link from "next/link";
 
 export const Header = async () => {
   const headersList = headers();
@@ -41,17 +42,21 @@ export const Header = async () => {
               variant="outlined"
               size="small"
               color="primary"
+              LinkComponent={Link}
+              href="/vehicles"
               sx={{
                 display: { xs: "none", sm: "inline-flex" },
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <KeyboardBackspaceRoundedIcon />
+              <KeyboardBackspaceRounded />
             </Button>
           </Grid>
           <Grid item xs={"auto"} flexGrow={1}>
-            <Typography variant="h4">{title}</Typography>
+            <Typography variant="h4" textTransform={"capitalize"}>
+              {title}
+            </Typography>
           </Grid>
           <Grid item xs={1} sm={0}>
             <IconButton
@@ -60,10 +65,11 @@ export const Header = async () => {
                 display: { xs: "inline-flex", sm: "none" },
                 alignItems: "center",
                 justifyContent: "center",
-                aspectRatio: "1 / 1",
               }}
+              LinkComponent={Link}
+              href="/vehicles"
             >
-              <CloseRoundedIcon />
+              <CloseRounded />
             </IconButton>
           </Grid>
         </Grid>
