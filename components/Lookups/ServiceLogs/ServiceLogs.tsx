@@ -26,7 +26,6 @@ export default async function getServiceLogs(
     | null
     | undefined
 ): Promise<ServiceLog[]> {
-  console.log(filters);
   const supabase = createClient();
 
   const { data, error } = await supabase

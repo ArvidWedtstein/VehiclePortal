@@ -20,7 +20,6 @@ interface VehiclesListProps {
 
 export default async function VehiclesList(props: VehiclesListProps) {
   const vehicles = await getVehicles();
-
   return vehicles.map((vehicle, idx) => (
     <Grid item xs={12} md={3} key={`vehicle-${idx}`}>
       <Card>

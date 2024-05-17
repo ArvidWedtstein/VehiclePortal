@@ -3,21 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../theme";
 import "./globals.css";
 import { Metadata } from "next";
-import {
-  AppBar,
-  Container,
-  Divider,
-  Drawer,
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Toolbar,
-} from "@mui/material";
-import { Inbox, Mail } from "@mui/icons-material";
+import { Grid } from "@mui/material";
 import Sidebar from "@/components/Sidebar/Sidebar";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -40,12 +26,6 @@ export default function RootLayout({
       <body style={{ height: "100%" }}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <AppBar position="static">
-              <Container maxWidth="xl">
-                <Toolbar disableGutters></Toolbar>
-              </Container>
-            </AppBar>
-
             <Grid container spacing={0}>
               <Grid item xs={0} md={2}>
                 <Sidebar />

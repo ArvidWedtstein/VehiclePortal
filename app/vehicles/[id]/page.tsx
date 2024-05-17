@@ -24,24 +24,35 @@ import {
   Add,
   AttachMoneyOutlined,
   CarRentalOutlined,
-  ConstructionSharp,
-  DensityMediumRounded,
-  DirectionsCar,
-  LinearScale,
-  LinearScaleRounded,
+  ConstructionOutlined,
+  DirectionsCarFilledOutlined,
+  GasMeterOutlined,
 } from "@mui/icons-material";
-import ServicesRealtime from "@/components/Vehicles/Services/ServicesGrid/ServicesRealtime";
+import { lazy } from "react";
 import { Vehicle } from "@/components/Lookups/Vehicles/Vehicles";
 import Stat from "@/components/Stat";
 import { Engine } from "@/components/Lookups/Engines/Engines";
 import { Transmission } from "@/components/Lookups/Transmissions/Transmissions";
 import GearShifter from "@/components/Icons/GearShifter";
-import ExpensesRealtime from "@/components/Vehicles/Expenses/ExpensesGrid/ExpensesRealtime";
+const ServicesRealtime = lazy(
+  () => import("@/components/Vehicles/Services/ServicesGrid/ServicesRealtime")
+);
+const ExpensesRealtime = lazy(
+  () => import("@/components/Vehicles/Expenses/ExpensesGrid/ExpensesRealtime")
+);
+
+// export async function generateStaticParams() {
+//   const posts = await fetch('https://.../posts').then((res) => res.json())
+
+//   return posts.map((post) => ({
+//     slug: post.slug,
+//   }))
+// }
 
 export default async function VehiclePage({
-  params: { slug },
+  params: { id },
 }: {
-  params: { slug: string };
+  params: { id: string };
 }) {
   const supabase = createClient();
   const { data: vehicle, error } = await supabase
@@ -78,7 +89,7 @@ export default async function VehiclePage({
       )
       `
     )
-    .match({ id: slug })
+    .match({ id: id })
     .returns<
       (Vehicle & {
         VehicleEngines?: Engine;
@@ -92,11 +103,12 @@ export default async function VehiclePage({
   }
   return (
     <Box>
-      <Grid sx={{ py: 2 }}>
-        <Stat variant="outlined" value={vehicle.name}></Stat>
-      </Grid>
       <Tabs>
-        <TabPanel label="General" icon={<DirectionsCar />} iconPosition="start">
+        <TabPanel
+          label="General"
+          icon={<DirectionsCarFilledOutlined />}
+          iconPosition="start"
+        >
           <Card variant="outlined" sx={{ mt: 3 }}>
             <CardContent>
               <Stack direction="row" spacing={2} alignItems={"center"}>
@@ -116,7 +128,7 @@ export default async function VehiclePage({
                 <Chip
                   variant="outlined"
                   sx={{ textTransform: "capitalize" }}
-                  label={vehicle?.VehicleTransmissions?.gears}
+                  label={`${vehicle?.VehicleTransmissions?.gears} gears`}
                   size="small"
                   icon={
                     <GearShifter gears={vehicle?.VehicleTransmissions?.gears} />
@@ -124,12 +136,15 @@ export default async function VehiclePage({
                 />
                 <Chip
                   variant="outlined"
-                  label={
-                    Math.round(vehicle?.VehicleEngines?.displacement || 0) /
-                    1000
-                  }
+                  label={`${(
+                    Math.round(
+                      (Math.round(vehicle?.VehicleEngines?.displacement || 0) /
+                        1000) *
+                        10
+                    ) / 10
+                  ).toFixed(1)} L`}
                   size="small"
-                  icon={<p>ccm</p>}
+                  icon={<GasMeterOutlined />}
                 />
                 {vehicle?.eu_control_date && (
                   <Chip
@@ -151,7 +166,7 @@ export default async function VehiclePage({
         </TabPanel>
         <TabPanel
           label="Service"
-          icon={<ConstructionSharp />}
+          icon={<ConstructionOutlined />}
           iconPosition="start"
         >
           <ServicesRealtime vehicle_id={vehicle.id} />

@@ -38,6 +38,7 @@ import { ServiceLog } from "@/components/Lookups/ServiceLogs/ServiceLogs";
 import theme from "@/theme";
 import Link from "next/link";
 import ServiceDialog from "../ServiceDialog/ServiceDialog";
+import { useSelectedLayoutSegments } from "next/navigation";
 
 interface ServicesRealtimeGridProps {
   serviceLogs: ServiceLog[];

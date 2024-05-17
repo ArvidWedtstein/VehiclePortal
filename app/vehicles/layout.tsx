@@ -1,21 +1,15 @@
-import {
-  Box,
-  Divider,
-  Drawer,
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Toolbar,
-} from "@mui/material";
+import { Box } from "@mui/material";
+import { Header } from "@/components/Header/Header";
 
-export default function VehiclesLayout({
+export default async function VehiclesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <Box sx={{ px: { xs: 1, md: 2 } }}>{children}</Box>;
+  return (
+    <>
+      <Header />
+      <Box sx={{ px: { xs: 1, md: 2 } }}>{children}</Box>
+    </>
+  );
 }

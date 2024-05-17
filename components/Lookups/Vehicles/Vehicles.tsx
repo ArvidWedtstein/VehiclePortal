@@ -23,17 +23,22 @@ export type Vehicle = {
   eu_control_date?: string;
 };
 
-export default async function getVehicles(
-  filters?:
-    | {
-        id?: number;
-      }
-    | undefined
+type ColumnsToReturn<T, C> = C extends "*" ? T : Pick<T, Extract<C, keyof T>>;
+
+type FilterKeys<T> = {
+  [K in keyof T]?: T[K];
+};
+
+export default async function getVehicles<
+  Columns extends (keyof Vehicle | "*")[]
+>(
+  filters?: FilterKeys<Vehicle>,
+  columns: Columns = ["*"] as Columns
 ): Promise<Vehicle[]> {
   const supabase = createClient();
   const { data: vehicles, error } = await supabase
     .from("Vehicles")
-    .select("*")
+    .select(columns.join(","))
     .match(filters || {})
     .returns<Vehicle[]>();
 
@@ -43,3 +48,23 @@ export default async function getVehicles(
 
   return vehicles;
 }
+
+// TODO: add relations to
+export const getVehicle = async <Columns extends (keyof Vehicle | "*")[]>(
+  filters?: FilterKeys<Vehicle>,
+  columns: Columns = ["*"] as Columns
+): Promise<ColumnsToReturn<Vehicle, Columns[number]>> => {
+  const supabase = createClient();
+  const { data: vehicle, error } = await supabase
+    .from("Vehicles")
+    .select(columns.join(","))
+    .match(filters || {})
+    .returns<Vehicle>()
+    .single();
+
+  if (error) {
+    return notFound();
+  }
+
+  return vehicle as ColumnsToReturn<Vehicle, Columns[number]>;
+};

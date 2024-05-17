@@ -14,7 +14,6 @@ import {
   Typography,
   Link as MuiLink,
 } from "@mui/material";
-import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { ChevronLeft } from "@mui/icons-material";
 

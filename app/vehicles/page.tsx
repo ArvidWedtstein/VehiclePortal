@@ -23,16 +23,6 @@ export default async function VehiclesPage() {
         </Grid>
         <VehiclesList />
       </Grid>
-
-      {/* <VehicleTypesTabs>
-        <TabPanel label="Cars">
-          <VehiclesList />
-          <Paper sx={{ p: 4, height: "100%" }}>xs=4</Paper>
-        </TabPanel>
-        <TabPanel label="Motorcycles">
-          <VehiclesList />
-        </TabPanel>
-      </VehicleTypesTabs> */}
     </Box>
   );
 }

@@ -29,6 +29,7 @@ import {
   Restore,
 } from "@mui/icons-material";
 import MobileMenu from "./MobileMenu";
+import { grey } from "@mui/material/colors";
 
 const pages = [
   {
@@ -58,7 +59,12 @@ export default async function Sidebar() {
       <Paper
         variant="elevation"
         elevation={1}
-        sx={{ height: "100%", display: { xs: "none", md: "block" } }}
+        square
+        sx={{
+          height: "100%",
+          display: { xs: "none", md: "block" },
+          bgcolor: grey[100],
+        }}
       >
         <List sx={{ display: { xs: "none", md: "block" } }}>
           <ListItem>

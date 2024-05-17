@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import ConnectSupabaseSteps from "@/components/tutorial/ConnectSupabaseSteps";
 
 export default async function Index() {
   const canInitSupabaseClient = () => {

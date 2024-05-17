@@ -13,7 +13,7 @@ import VehicleForm from "./VehicleForm";
 import { Close } from "@mui/icons-material";
 import { createVehicle, getVehicleData } from "@/app/vehicles/actions";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import getVehicles from "@/components/Lookups/Vehicles/Vehicles";
+import { getVehicle } from "@/components/Lookups/Vehicles/Vehicles";
 import { Engine } from "@/components/Lookups/Engines/Engines";
 
 export type FormData = {
@@ -76,13 +76,12 @@ export default function VehicleDialog({
   );
 
   useEffect(() => {
-    const getVehicle = async () => {
-      const vehicle = await getVehicles({ id: id || -1 });
-
-      setFormData((prev) => ({ ...prev, ...vehicle[0] }));
+    const getVehicleData = async () => {
+      const vehicle = await getVehicle({ id: id || -1 });
+      setFormData((prev) => ({ ...prev, ...vehicle }));
     };
 
-    getVehicle();
+    getVehicleData();
   }, []);
 
   const steps = ["General Data", "Engine", "Transmission"];
