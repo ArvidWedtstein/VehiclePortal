@@ -30,6 +30,8 @@ import dayjs from "dayjs";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { FormData } from "./VehicleDialog";
 
+// https://supabase.com/docs/guides/getting-started/tutorials/with-nextjs?queryGroups=language&language=ts
+
 type VehicleProps = {
   id?: number;
   activeStep: number;

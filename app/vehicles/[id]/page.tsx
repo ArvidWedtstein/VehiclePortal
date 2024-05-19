@@ -25,8 +25,8 @@ import {
   AttachMoneyOutlined,
   CarRentalOutlined,
   ConstructionOutlined,
-  DirectionsCarFilledOutlined,
   GasMeterOutlined,
+  Inventory2Outlined,
 } from "@mui/icons-material";
 import { lazy } from "react";
 import { Vehicle } from "@/components/Lookups/Vehicles/Vehicles";
@@ -35,6 +35,9 @@ import { Engine } from "@/components/Lookups/Engines/Engines";
 import { Transmission } from "@/components/Lookups/Transmissions/Transmissions";
 import GearShifter from "@/components/Icons/GearShifter";
 import Car from "@/components/Icons/Car";
+const Documents = lazy(
+  () => import("@/components/Vehicles/Documents/Documents")
+);
 const ServicesRealtime = lazy(
   () => import("@/components/Vehicles/Services/ServicesGrid/ServicesRealtime")
 );
@@ -115,34 +118,44 @@ export default async function VehiclePage({
                   size="small"
                   icon={<CarRentalOutlined />}
                 />
-                <Chip
-                  variant="outlined"
-                  sx={{ textTransform: "capitalize" }}
-                  label={vehicle?.VehicleTransmissions?.type}
-                  size="small"
-                  icon={<CarRentalOutlined />}
-                />
-                <Chip
-                  variant="outlined"
-                  sx={{ textTransform: "capitalize" }}
-                  label={`${vehicle?.VehicleTransmissions?.gears} gears`}
-                  size="small"
-                  icon={
-                    <GearShifter gears={vehicle?.VehicleTransmissions?.gears} />
-                  }
-                />
-                <Chip
-                  variant="outlined"
-                  label={`${(
-                    Math.round(
-                      (Math.round(vehicle?.VehicleEngines?.displacement || 0) /
-                        1000) *
-                        10
-                    ) / 10
-                  ).toFixed(1)} L`}
-                  size="small"
-                  icon={<GasMeterOutlined />}
-                />
+                {vehicle?.VehicleTransmissions?.type && (
+                  <Chip
+                    variant="outlined"
+                    sx={{ textTransform: "capitalize" }}
+                    label={vehicle?.VehicleTransmissions?.type}
+                    size="small"
+                    icon={<CarRentalOutlined />}
+                  />
+                )}
+                {vehicle?.VehicleTransmissions?.gears && (
+                  <Chip
+                    variant="outlined"
+                    sx={{ textTransform: "capitalize" }}
+                    label={`${vehicle?.VehicleTransmissions?.gears} gears`}
+                    size="small"
+                    icon={
+                      <GearShifter
+                        gears={vehicle?.VehicleTransmissions?.gears}
+                      />
+                    }
+                  />
+                )}
+                {vehicle?.VehicleEngines?.displacement && (
+                  <Chip
+                    variant="outlined"
+                    label={`${(
+                      Math.round(
+                        (Math.round(
+                          vehicle?.VehicleEngines?.displacement || 0
+                        ) /
+                          1000) *
+                          10
+                      ) / 10
+                    ).toFixed(1)} L`}
+                    size="small"
+                    icon={<GasMeterOutlined />}
+                  />
+                )}
                 {vehicle?.eu_control_date && (
                   <Chip
                     variant="outlined"
@@ -174,6 +187,16 @@ export default async function VehiclePage({
           iconPosition="start"
         >
           <ExpensesRealtime vehicle_id={vehicle.id} />
+        </TabPanel>
+        <TabPanel
+          label="Documents"
+          icon={<Inventory2Outlined />}
+          iconPosition="start"
+        >
+          <Documents
+            vehicle_id={vehicle.id}
+            register_number={vehicle.register_number || ""}
+          />
         </TabPanel>
       </Tabs>
     </Box>

@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 import { Engine } from "../Engines/Engines";
+import { ColumnsToReturn, FilterKeys } from "@/utils/utils";
 
 export type Vehicle = {
   id: number;
@@ -23,12 +24,6 @@ export type Vehicle = {
   transmission_id?: number;
   eu_control_date?: string;
   VehicleEngines?: Engine;
-};
-
-type ColumnsToReturn<T, C> = C extends "*" ? T : Pick<T, Extract<C, keyof T>>;
-
-type FilterKeys<T> = {
-  [K in keyof T]?: T[K];
 };
 
 export default async function getVehicles<

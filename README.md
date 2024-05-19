@@ -76,8 +76,6 @@ Plan is to replace the excel spreadsheet that was used for this task until now.
   <li>Find good solution for features below</li>
 </ul>
 
-Scope:
-
 <details>
   <summary>Priorities</summary>
   <table>
