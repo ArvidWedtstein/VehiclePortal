@@ -62,6 +62,10 @@ export default function VehicleDialog({
     gears: null,
   });
 
+  // https://tekstapp.atlas.vegvesen.no/api/apptekst?apper=apne-sider-kjoretoyopplysninger,datautlevering,dinside-navigasjon,dinside-topp&sprak=en&miljo=prod
+  // https://kjoretoyoppslag.atlas.vegvesen.no/ws/no/vegvesen/kjoretoy/kjoretoyoppslag/v1/oppslag/raw/RL45215
+
+  // kjoretoy -> godkjenning -> tekniskGodkjenning -> kjoretoyklassifisering -> tekniskKode -> kodeVerdi / kodeNavn = type of vehicle
   const handleChange = useMemo(
     () => (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;

@@ -5,6 +5,7 @@ import FilePreviewModal from "./FilePreviewModal";
 import {
   Avatar,
   Button,
+  IconButton,
   List,
   ListItem,
   ListItemAvatar,
@@ -13,11 +14,18 @@ import {
 } from "@mui/material";
 import {
   CloudUploadOutlined,
+  Delete,
+  DeleteOutlined,
+  DeleteOutlineOutlined,
   FileOpenOutlined,
   Image,
 } from "@mui/icons-material";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { uploadFile } from "@/components/Lookups/Documents/Documents";
+import {
+  deleteFile,
+  uploadFile,
+} from "@/components/Lookups/Documents/Documents";
+import { createClient } from "@/utils/supabase/client";
 
 interface DocumentsListProps {
   documents: {
@@ -43,6 +51,17 @@ export default function DocumentsList({ documents }: DocumentsListProps) {
     filename: null,
   });
 
+  // TODO: fix refreshing after upload
+  // TODO: add option to delete documents
+  const generateDataUrl = (
+    file: File,
+    callback: (imageUrl: string) => void
+  ) => {
+    const reader = new FileReader();
+    reader.onload = () => callback(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
   const handleUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
@@ -50,7 +69,10 @@ export default function DocumentsList({ documents }: DocumentsListProps) {
       return;
     }
 
-    uploadFile(`TF21166/${file.name}`, file);
+    generateDataUrl(file, (fileString) => {
+      // fix
+      uploadFile(`TF21166/${file.name}`, { file: fileString });
+    });
   };
 
   return (
@@ -69,20 +91,22 @@ export default function DocumentsList({ documents }: DocumentsListProps) {
         startIcon={<CloudUploadOutlined />}
       >
         Upload file
-        <input
-          type="file"
-          onChange={(event) =>
-            uploadFile(
-              `TF21166/${event.target.files?.[0]?.name || ""}`,
-              event.target.files?.[0]
-            )
-          }
-          hidden
-        />
+        <input type="file" onChange={handleUpload} hidden accept="image/*" />
       </Button>
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         {documents.map((document) => (
-          <ListItem key={document.id}>
+          <ListItem
+            key={document.id}
+            secondaryAction={
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => deleteFile(document.path || "")}
+              >
+                <DeleteOutlined />
+              </IconButton>
+            }
+          >
             <ListItemButton
               onClick={() =>
                 setCurrentDocument({

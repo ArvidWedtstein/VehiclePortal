@@ -34,25 +34,47 @@ export const getDocuments = async <Columns extends (keyof Document)[] | ["*"]>(
     throw error;
   }
 
-  // let l: ColumnsToReturn<Document, Columns[number]> = { name: '', created: '', id: 0, file_id: '', vehicle_id: 3, type: '' }
-
   return documents as SelectColumns<Document, Columns>[];
 };
 
-export const uploadFile = async (path: string, file: File | undefined) => {
+export const uploadFile = async (
+  path: string,
+  fileObject: { file: string | undefined }
+) => {
   const supabase = createClient();
 
-  if (!file) {
+  if (!fileObject.file) {
     return;
   }
 
   const { data, error } = await supabase.storage
     .from("VehicleDocuments")
-    .upload(path, file);
+    .upload(path, fileObject.file);
 
   if (error) {
     throw error;
   }
 
   console.log(data, error);
+
+  return data;
+};
+
+export const deleteFile = async (path: string) => {
+  try {
+    const supabase = createClient();
+
+    const { error } = await supabase.storage
+      .from("VehicleDocuments")
+      .remove([path]);
+
+    if (error) {
+      throw error;
+    }
+
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 };

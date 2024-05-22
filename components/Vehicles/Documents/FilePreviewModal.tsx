@@ -37,8 +37,8 @@ export default function FilePreviewModal({
   const [scale, setScale] = useState(1);
   const [rotation, setRotation] = useState(0);
 
-  const zoomIn = () => setScale(scale + 0.1);
-  const zoomOut = () => setScale(scale - 0.1);
+  const zoomIn = () => setScale(scale + 0.05);
+  const zoomOut = () => setScale(scale - 0.05);
   const rotateLeft = () =>
     setRotation((previousRotation) => previousRotation - 90);
   const rotateRight = () =>
@@ -92,7 +92,9 @@ export default function FilePreviewModal({
             overflow: "hidden",
           }}
         >
-          {url && <Image src={url || ""} alt={""} width={500} height={400} />}
+          {url && (
+            <img src={`${url}&quality=75` || ""} alt={""} loading="lazy" />
+          )}
         </div>
       </DialogContent>
       <AppBar sx={{ position: "relative" }} color="default">
