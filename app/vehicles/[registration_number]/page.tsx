@@ -54,9 +54,9 @@ const ExpensesRealtime = lazy(
 // }
 
 export default async function VehiclePage({
-  params: { id },
+  params: { registration_number },
 }: {
-  params: { id: string };
+  params: { registration_number: string };
 }) {
   const supabase = createClient();
   const { data: vehicle, error } = await supabase
@@ -93,7 +93,7 @@ export default async function VehiclePage({
       )
       `
     )
-    .match({ id: id })
+    .match({ register_number: registration_number.toUpperCase() })
     .returns<
       (Vehicle & {
         VehicleEngines?: Engine;

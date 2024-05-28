@@ -5,11 +5,6 @@ import {
   CardHeader,
   CardMedia,
   Grid,
-  IconButton,
-  List,
-  ListItem,
-  Menu,
-  MenuItem,
   Typography,
 } from "@mui/material";
 import getVehicles from "../Lookups/Vehicles/Vehicles";
@@ -23,7 +18,7 @@ export default async function VehiclesList(props: VehiclesListProps) {
   return vehicles.map((vehicle, idx) => (
     <Grid item xs={12} md={3} key={`vehicle-${idx}`}>
       <Card>
-        <CardActionArea href={`/vehicles/${vehicle.id}`}>
+        <CardActionArea href={`/vehicles/${vehicle.register_number}`}>
           <CardMedia
             component={"img"}
             height="140"

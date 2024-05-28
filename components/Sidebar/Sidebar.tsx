@@ -46,14 +46,6 @@ export default async function Sidebar() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const signOut = async () => {
-    "use server";
-
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    return redirect("/login");
-  };
-
   return (
     <>
       <Paper
@@ -69,11 +61,11 @@ export default async function Sidebar() {
         <List sx={{ display: { xs: "none", md: "block" } }}>
           <ListItem>
             {user ? (
-              <ProfileMenu>
+              <ProfileMenu user={user}>
                 <MenuItem component={"a"} href={`/profile/${user.id}`}>
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-                <MenuItem onClick={signOut}>
+                <MenuItem component={"a"} href="/auth/signout">
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
               </ProfileMenu>

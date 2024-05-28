@@ -168,6 +168,15 @@ Plan is to replace the excel spreadsheet that was used for this task until now.
         <p>Integration to SVV API for data on Vehicle</p>
       </td>
     </tr>
+    <tr>
+      <td>🟠</td>
+      <td><b>Dashboard for users, roles and transfering of data</b></td>
+      <td>
+        <p>
+          Dashboard for managing users data
+        </p>
+      </td>
+    </tr>
   </tbody>
 </table>
 

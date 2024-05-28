@@ -6,7 +6,7 @@ import { useThemeProps } from "@mui/material/styles";
 
 export interface StatProps {
   header?: string;
-  value: number | string;
+  value?: number | string;
   description?: string;
   icon?: React.ReactNode;
   variant?: "outlined" | "standard";
