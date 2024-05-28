@@ -24,14 +24,15 @@ export default async function Documents({
   const documents = await getDocuments({ vehicle_id: vehicle_id });
   const supabase = createClient();
 
-  const { data, error } = await supabase.storage
-    .from("VehicleDocuments")
-    .createSignedUrls(
-      documents.map((document) => `${register_number}/${document.name}`),
-      42069
-    );
+  const { data, error } = documents.length
+    ? await supabase.storage.from("VehicleDocuments").createSignedUrls(
+        documents.map((document) => `${register_number}/${document.name}`),
+        42069
+      )
+    : { data: documents, error: null };
 
-  if (!documents || error) {
+  if (error) {
+    console.error(error);
     return notFound();
   }
 
@@ -41,7 +42,7 @@ export default async function Documents({
   }));
 
   return documentsWithUrls ? (
-    <DocumentsList documents={documentsWithUrls} />
+    <DocumentsList documents={documentsWithUrls || []} />
   ) : (
     ""
   );

@@ -23,10 +23,12 @@ import Tabs, { TabPanel } from "@/components/Tabs";
 import {
   Add,
   AttachMoneyOutlined,
+  BikeScooterOutlined,
   CarRentalOutlined,
   ConstructionOutlined,
   GasMeterOutlined,
   Inventory2Outlined,
+  LocalGasStationOutlined,
 } from "@mui/icons-material";
 import { lazy } from "react";
 import { Vehicle } from "@/components/Lookups/Vehicles/Vehicles";
@@ -35,6 +37,7 @@ import { Engine } from "@/components/Lookups/Engines/Engines";
 import { Transmission } from "@/components/Lookups/Transmissions/Transmissions";
 import GearShifter from "@/components/Icons/GearShifter";
 import Car from "@/components/Icons/Car";
+import Motorcycle from "@/components/Icons/Motorcycle";
 const Documents = lazy(
   () => import("@/components/Vehicles/Documents/Documents")
 );
@@ -79,6 +82,8 @@ export default async function VehiclePage({
       vehicle_identification_number,
       engine_id,
       transmission_id,
+      fuel_capacity,
+      type,
       VehicleEngines (
         name,
         kilowatt,
@@ -163,16 +168,33 @@ export default async function VehiclePage({
                     size="small"
                   />
                 )}
+                {vehicle?.fuel_capacity && (
+                  <Chip
+                    variant="outlined"
+                    label={`${vehicle?.fuel_capacity} L` || ""}
+                    size="small"
+                    icon={<LocalGasStationOutlined />}
+                  />
+                )}
+                {vehicle?.type && (
+                  <Chip
+                    variant="outlined"
+                    label={vehicle?.type || ""}
+                    size="small"
+                    icon={
+                      vehicle.type === "M1" ? (
+                        <Car />
+                      ) : vehicle.type === "MCT" ? (
+                        <Motorcycle />
+                      ) : (
+                        <BikeScooterOutlined />
+                      )
+                    }
+                  />
+                )}
               </Stack>
             </CardContent>
           </Card>
-          <Stat
-            header={"tralala"}
-            value={124}
-            icon={<Add />}
-            description={"tralal"}
-          />
-          <pre>{JSON.stringify(vehicle, null, 2)}</pre>
         </TabPanel>
         <TabPanel
           label="Service"

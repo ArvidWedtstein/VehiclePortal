@@ -24,6 +24,8 @@ export type Vehicle = {
   transmission_id?: number;
   eu_control_date?: string;
   VehicleEngines?: Engine;
+  type?: string;
+  fuel_capacity?: number;
 };
 
 // export enum VehicleCategories {

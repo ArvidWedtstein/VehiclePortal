@@ -28,7 +28,7 @@ import {
 import { createClient } from "@/utils/supabase/client";
 
 interface DocumentsListProps {
-  documents: {
+  documents: Partial<{
     error: string | null;
     path: string | null;
     signedUrl: string;
@@ -39,7 +39,7 @@ interface DocumentsListProps {
     type?: string | undefined;
     service_log_id?: number | undefined;
     file_id: string;
-  }[];
+  }>[];
 }
 
 export default function DocumentsList({ documents }: DocumentsListProps) {
@@ -110,8 +110,8 @@ export default function DocumentsList({ documents }: DocumentsListProps) {
             <ListItemButton
               onClick={() =>
                 setCurrentDocument({
-                  url: document.signedUrl,
-                  filename: document.name,
+                  url: document?.signedUrl || "",
+                  filename: document.name || "",
                 })
               }
             >
