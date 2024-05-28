@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { type ComponentProps } from "react";
 import { Button, ButtonProps } from "@mui/material";
 
 type Props = ButtonProps & {

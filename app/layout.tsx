@@ -2,15 +2,17 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../theme";
 import "./globals.css";
-import Navbar from "@/components/Navbar/Navbar";
+import { Metadata } from "next";
+import { Grid } from "@mui/material";
+import Sidebar from "@/components/Sidebar/Sidebar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Vehicle DB",
+  title: "Vehicle Portal",
   description: "Tralalal",
 };
 
@@ -20,12 +22,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" style={{ height: "100vh", overflowX: "hidden" }}>
+      <body style={{ height: "100%" }}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <Navbar />
-            {children}
+            <Grid container spacing={0}>
+              <Grid item xs={0} md={2}>
+                <Sidebar />
+              </Grid>
+              <Grid item xs={12} md={10} overflow={"auto"} pb={8}>
+                {children}
+              </Grid>
+            </Grid>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
