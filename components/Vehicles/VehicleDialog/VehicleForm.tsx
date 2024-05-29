@@ -5,7 +5,6 @@ import EnginesAutocomplete from "@/components/Lookups/Engines/EnginesAutocomplet
 import getServiceLogs, {
   ServiceLog,
 } from "@/components/Lookups/ServiceLogs/ServiceLogs";
-import ServiceTypesAutocomplete from "@/components/Lookups/ServiceTypes/ServiceTypesAutocomplete";
 import TransmissionsAutocomplete from "@/components/Lookups/Transmissions/TransmissionsAutocomplete";
 import getVehicles, { Vehicle } from "@/components/Lookups/Vehicles/Vehicles";
 import {

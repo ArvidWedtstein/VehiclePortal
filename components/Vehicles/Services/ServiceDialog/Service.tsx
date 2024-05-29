@@ -3,7 +3,6 @@
 import getServiceLogs, {
   ServiceLog,
 } from "@/components/Lookups/ServiceLogs/ServiceLogs";
-import ServiceTypesAutocomplete from "@/components/Lookups/ServiceTypes/ServiceTypesAutocomplete";
 import {
   FormControl,
   FormControlLabel,
@@ -41,8 +40,13 @@ export default function Service({ id }: ServiceProps) {
       {serviceLog && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <ServiceTypesAutocomplete
-              defaultValue={serviceLog?.service_type_id}
+            <TextField
+              margin="dense"
+              name="type"
+              label="Type"
+              type="text"
+              fullWidth
+              defaultValue={serviceLog?.type}
             />
           </Grid>
           <Grid item xs={12} md={6}>

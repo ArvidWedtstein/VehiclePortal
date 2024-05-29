@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -31,7 +32,6 @@ import {
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { ServiceType } from "../../../Lookups/ServiceTypes/ServiceTypes";
 import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
 import EditToolbar from "./EditToolbar";
 import { ServiceLog } from "@/components/Lookups/ServiceLogs/ServiceLogs";
@@ -42,12 +42,10 @@ import { useSelectedLayoutSegments } from "next/navigation";
 
 interface ServicesRealtimeGridProps {
   serviceLogs: ServiceLog[];
-  serviceTypes: ServiceType[];
 }
 
 export default function ServicesRealtimeGrid({
   serviceLogs,
-  serviceTypes,
 }: ServicesRealtimeGridProps) {
   const matches = useMediaQuery("(min-width:900px)");
 
@@ -164,18 +162,11 @@ export default function ServicesRealtimeGrid({
       valueFormatter: (value) => new Date(value),
     },
     {
-      field: "service_type_id",
+      field: "type",
       headerName: "Type",
       width: 150,
       editable: true,
-      type: "singleSelect",
-      valueOptions: serviceTypes,
-      getOptionValue(value: any) {
-        return value.id;
-      },
-      getOptionLabel(value: any) {
-        return value.name;
-      },
+      type: "string",
     },
     { field: "notes", headerName: "Notes", width: 300, editable: true },
     {
@@ -274,6 +265,9 @@ export default function ServicesRealtimeGrid({
         />
       ) : (
         <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Button>New</Button>
+          </Grid>
           {services.map((row) => (
             <Grid item key={row.id} xs={12}>
               <Card>
@@ -283,11 +277,7 @@ export default function ServicesRealtimeGrid({
                   }}
                 >
                   <CardHeader
-                    title={
-                      serviceTypes.find(
-                        (type) => type.id === row.service_type_id
-                      )?.name || ""
-                    }
+                    title={row.type}
                     subheader={Intl.DateTimeFormat("en-GB").format(
                       new Date(row.service_date || row.created_at)
                     )}

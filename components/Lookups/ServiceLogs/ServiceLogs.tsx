@@ -10,7 +10,7 @@ export type ServiceLog = {
   vehicle_id: number;
   cost: number;
   currency: string;
-  service_type_id: number;
+  type: string;
   service_provider?: string;
   service_date?: string;
   odometer_reading?: number;

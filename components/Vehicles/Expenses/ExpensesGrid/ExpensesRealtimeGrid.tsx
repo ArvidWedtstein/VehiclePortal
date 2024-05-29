@@ -30,7 +30,6 @@ import {
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { ServiceType } from "../../../Lookups/ServiceTypes/ServiceTypes";
 import { Cancel, Delete, Edit, Save } from "@mui/icons-material";
 import EditToolbar from "./EditToolbar";
 import { ServiceLog } from "@/components/Lookups/ServiceLogs/ServiceLogs";

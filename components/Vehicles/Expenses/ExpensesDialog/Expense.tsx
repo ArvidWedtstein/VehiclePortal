@@ -7,7 +7,6 @@ import {
 import getServiceLogs, {
   ServiceLog,
 } from "@/components/Lookups/ServiceLogs/ServiceLogs";
-import ServiceTypesAutocomplete from "@/components/Lookups/ServiceTypes/ServiceTypesAutocomplete";
 import {
   FormControl,
   FormControlLabel,
