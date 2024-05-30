@@ -38,6 +38,7 @@ import { Transmission } from "@/components/Lookups/Transmissions/Transmissions";
 import GearShifter from "@/components/Icons/GearShifter";
 import Car from "@/components/Icons/Car";
 import Motorcycle from "@/components/Icons/Motorcycle";
+import Blob from "@/components/Blob";
 const Documents = lazy(
   () => import("@/components/Vehicles/Documents/Documents")
 );
@@ -108,6 +109,7 @@ export default async function VehiclePage({
     .single();
 
   if (!vehicle || error) {
+    console.error(error);
     notFound();
   }
   return (

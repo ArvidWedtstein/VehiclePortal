@@ -28,5 +28,5 @@ export const signInWith = async (
     redirect(data.url);
   }
 
-  return redirect("/protected");
+  return redirect("/vehicles");
 };
