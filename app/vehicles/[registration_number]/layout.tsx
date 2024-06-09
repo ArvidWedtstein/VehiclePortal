@@ -1,13 +1,8 @@
-export default function VehicleLayout(props: {
+export default async function VehicleLayout(props: {
   children: React.ReactNode;
   services: React.ReactNode;
   documents: React.ReactNode;
+  params?: { registration_number: string };
 }) {
-  console.log(props);
-  return (
-    <>
-      {props.children}
-      {props.services}
-    </>
-  );
+  return <>{props.children}</>;
 }

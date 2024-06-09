@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { FilterKeys } from "@/utils/utils";
 import { notFound } from "next/navigation";
 
 export type ServiceLog = {
@@ -17,14 +18,11 @@ export type ServiceLog = {
   notes?: string;
 };
 
-export default async function getServiceLogs(
-  filters?:
-    | {
-        id?: number;
-        vehicle_id?: number;
-      }
-    | null
-    | undefined
+export default async function getServiceLogs<
+  Columns extends (keyof ServiceLog | "*")[]
+>(
+  filters?: FilterKeys<ServiceLog>,
+  columns: Columns = ["*"] as Columns
 ): Promise<ServiceLog[]> {
   const supabase = createClient();
 
