@@ -38,14 +38,15 @@ import { ServiceLog } from "@/components/Lookups/ServiceLogs/ServiceLogs";
 import theme from "@/theme";
 import Link from "next/link";
 import ServiceDialog from "../ServiceDialog/ServiceDialog";
-import { useSelectedLayoutSegments } from "next/navigation";
 
 interface ServicesRealtimeGridProps {
   serviceLogs: ServiceLog[];
+  vehicle_id: number;
 }
 
 export default function ServicesRealtimeGrid({
   serviceLogs,
+  vehicle_id,
 }: ServicesRealtimeGridProps) {
   const matches = useMediaQuery("(min-width:900px)");
 
@@ -133,9 +134,20 @@ export default function ServicesRealtimeGrid({
       Object.entries(newRow).filter(([k]) => k !== "isNew" && k !== "id")
     );
 
+    console.log("update", row);
     const { error } = await supabase
       .from("VehicleServiceLogs")
-      .update(row)
+      .upsert({
+        // type: newRow.type,
+        // notes: newRow.notes,
+        // currency: newRow.currency,
+        // cost: newRow.cost,
+        // service_date: newRow.service_date,
+        // service_provider: newRow.service_provider,
+        // odometer_reading: newRow.odometer_reading,
+        ...row,
+        vehicle_id: vehicle_id,
+      })
       .eq("id", newRow.id);
 
     if (error) {
@@ -266,7 +278,11 @@ export default function ServicesRealtimeGrid({
       ) : (
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Button>New</Button>
+            <Button
+              onClick={() => setServiceLogId(() => ({ open: true, id: null }))}
+            >
+              New
+            </Button>
           </Grid>
           {services.map((row) => (
             <Grid item key={row.id} xs={12}>

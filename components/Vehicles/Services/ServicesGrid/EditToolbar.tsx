@@ -18,25 +18,25 @@ export default function EditToolbar(props: EditToolbarProps) {
   const { setServices, setRowModesModel } = props;
 
   const handleClick = () => {
-    const id = Math.random();
+    const id = parseInt((Math.random() * 10).toFixed(0));
     setServices((oldRows) => [
       ...oldRows,
       {
         id,
         currency: "NOK",
+        type: null,
         service_provider: null,
         odometer_reading: null,
         notes: null,
-        service_date: null,
+        service_date: new Date(),
         cost: null,
-        service_type_id: null,
         isNew: true,
       },
     ]);
 
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "type" },
     }));
   };
 

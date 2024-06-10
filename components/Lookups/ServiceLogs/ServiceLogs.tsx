@@ -28,7 +28,7 @@ export default async function getServiceLogs<
 
   const { data, error } = await supabase
     .from("VehicleServiceLogs")
-    .select("*")
+    .select(columns.join(","))
     .match(filters || {})
     .returns<ServiceLog[]>();
 

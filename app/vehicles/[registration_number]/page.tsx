@@ -14,6 +14,7 @@ import {
   Paper,
   Select,
   Stack,
+  Tab,
   TextField,
   Typography,
   useMediaQuery,
@@ -41,9 +42,7 @@ import Motorcycle from "@/components/Icons/Motorcycle";
 const Documents = lazy(
   () => import("@/components/Vehicles/Documents/Documents")
 );
-const ServicesRealtime = lazy(
-  () => import("@/components/Vehicles/Services/ServicesGrid/ServicesRealtime")
-);
+
 const ExpensesRealtime = lazy(
   () => import("@/components/Vehicles/Expenses/ExpensesGrid/ExpensesRealtime")
 );
@@ -202,7 +201,7 @@ export default async function VehiclePage({
           icon={<ConstructionOutlined />}
           iconPosition="start"
         >
-          <ServicesRealtime vehicle_id={vehicle.id} />
+          <p>tralala</p>
         </TabPanel>
         <TabPanel
           label="Expenses"
