@@ -1,6 +1,12 @@
 "use client";
 
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import Service from "./Service";
 
 type ServiceDialogProps = {
@@ -17,6 +23,9 @@ export default function ServiceDialog({
     <Dialog open={open} onClose={onClose}>
       {open && (
         <>
+          <DialogTitle id="alert-dialog-title">
+            {id ? "Edit Service" : "New Service"}
+          </DialogTitle>
           <DialogContent>
             <Service id={id || undefined} />
           </DialogContent>
@@ -34,7 +43,7 @@ export default function ServiceDialog({
                 }
               }}
             >
-              Save
+              {id ? "Save" : "Create"}
             </Button>
           </DialogActions>
         </>

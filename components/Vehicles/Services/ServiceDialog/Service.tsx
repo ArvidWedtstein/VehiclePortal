@@ -25,11 +25,26 @@ export default function Service({ id }: ServiceProps) {
 
   useEffect(() => {
     const getServiceLog = async () => {
-      if (!id) return;
+      if (id) {
+        const serviceLog = await getServiceLogs({ id: id });
 
-      const serviceLog = await getServiceLogs({ id: id });
+        setServiceLog(serviceLog[0]);
+        return;
+      }
 
-      setServiceLog(id ? serviceLog[0] : null);
+      setServiceLog({
+        id: Math.random(),
+        type: "",
+        notes: undefined,
+        currency: "NOK",
+        cost: 0,
+        service_date: new Date().toISOString(),
+        service_provider: undefined,
+        odometer_reading: undefined,
+        vehicle_id: 1,
+        created_at: new Date().toISOString(),
+        createdby_id: "",
+      });
     };
 
     getServiceLog();
@@ -51,7 +66,7 @@ export default function Service({ id }: ServiceProps) {
           </Grid>
           <Grid item xs={12} md={6}>
             <TextField
-              margin="dense"
+              margin="none"
               name="service_provider"
               label="Provider"
               type="text"
@@ -88,9 +103,6 @@ export default function Service({ id }: ServiceProps) {
               label="Odometer Reading"
               type="number"
               fullWidth
-              InputLabelProps={{
-                shrink: !!serviceLog?.odometer_reading,
-              }}
               defaultValue={serviceLog?.odometer_reading}
             />
           </Grid>

@@ -16,10 +16,7 @@ export const Header = async () => {
     ?.split("/")
     .findLast((p) => p);
 
-  const title = isNaN(parseInt(path || ""))
-    ? path
-    : (await getVehicle({ id: parseInt(path || "") }, ["register_number"]))
-        .register_number;
+  const title = isNaN(parseInt(path || "")) ? path : path;
 
   return (
     <Box

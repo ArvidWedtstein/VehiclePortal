@@ -52,6 +52,14 @@ export default function ServicesRealtimeGrid({
 
   const supabase = createClient();
 
+  const [serviceLogId, setServiceLogId] = useState<{
+    id: number | null;
+    open: boolean;
+  }>({
+    id: null,
+    open: false,
+  });
+
   const [services, setServices] =
     useState<(ServiceLog & { isNew?: boolean })[]>(serviceLogs);
 
@@ -89,7 +97,8 @@ export default function ServicesRealtimeGrid({
   };
 
   const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    setServiceLogId({ open: true, id: id as number | null });
+    // setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
@@ -138,13 +147,6 @@ export default function ServicesRealtimeGrid({
     const { error } = await supabase
       .from("VehicleServiceLogs")
       .upsert({
-        // type: newRow.type,
-        // notes: newRow.notes,
-        // currency: newRow.currency,
-        // cost: newRow.cost,
-        // service_date: newRow.service_date,
-        // service_provider: newRow.service_provider,
-        // odometer_reading: newRow.odometer_reading,
         ...row,
         vehicle_id: vehicle_id,
       })
@@ -243,14 +245,6 @@ export default function ServicesRealtimeGrid({
     },
   ];
 
-  const [serviceLogId, setServiceLogId] = useState<{
-    id: number | null;
-    open: boolean;
-  }>({
-    id: null,
-    open: false,
-  });
-
   return (
     <Box>
       <ServiceDialog
@@ -272,7 +266,7 @@ export default function ServicesRealtimeGrid({
           processRowUpdate={processRowUpdate}
           slots={{ toolbar: EditToolbar as GridSlots["toolbar"] }}
           slotProps={{
-            toolbar: { setServices, setRowModesModel },
+            toolbar: { setServices, setRowModesModel, setServiceLogId },
           }}
         />
       ) : (

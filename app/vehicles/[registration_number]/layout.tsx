@@ -10,12 +10,9 @@ import { useSelectedLayoutSegment } from "next/navigation";
 
 export default function VehicleLayout(props: {
   children: Readonly<React.ReactNode>;
-  services: Readonly<React.ReactNode>;
-  documents: React.ReactNode;
   params?: { registration_number: string };
 }) {
   const segment = useSelectedLayoutSegment() || "general";
-
   return (
     <>
       <Tabs value={segment} variant="scrollable">
