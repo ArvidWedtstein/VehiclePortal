@@ -1,2 +1,2 @@
 export const getLanguage = () =>
-  navigator?.language || (navigator?.languages || ["en"])[0];
+  navigator ? navigator?.language || (navigator?.languages || ["en"])[0] : "en";
