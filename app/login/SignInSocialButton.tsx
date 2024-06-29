@@ -13,8 +13,6 @@ export default function SignInSocialButton({
   social,
   ...other
 }: SignInSocialButtonProps) {
-  const handleClick = () => {};
-
   const icon =
     social === "discord" ? (
       <Discord />

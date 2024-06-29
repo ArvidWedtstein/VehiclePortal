@@ -21,7 +21,7 @@ export default function VehicleLayout(props: {
           icon={<Car />}
           iconPosition="start"
           value={"general"}
-          href={`/vehicles/${props.params?.registration_number}/general`}
+          href={`/vehicles/${props.params?.registration_number}`}
         />
         <Tab
           label="Services"
