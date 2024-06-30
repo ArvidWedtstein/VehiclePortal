@@ -41,14 +41,16 @@ export async function shareVehicle({
   user_id: VehicleShares["user_id"];
   vehicle_id: VehicleShares["vehicle_id"];
 }) {
-  const supabase = createClient();
+  try {
+    const supabase = createClient();
 
-  console.log(vehicle_id, user_id);
-  const { data, error } = await supabase
-    .from("VehiclesShared")
-    .insert({ vehicle_id, user_id })
-    .single();
+    console.log(parseInt(vehicle_id.toString() as string), user_id);
+    const { data, error } = await supabase
+      .from("VehicleShares")
+      .upsert({ vehicle_id, user_id })
+      .single();
 
-  console.log(data, error);
-  return { data, error };
+    console.log(data, error);
+    return { data, error };
+  } catch (pErr) {}
 }

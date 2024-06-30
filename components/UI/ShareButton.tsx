@@ -1,27 +1,38 @@
 "use client";
 
-import { Button } from "@mui/material";
+import { Button, Snackbar } from "@mui/material";
 import { shareVehicle } from "../Lookups/VehiclesShared/VehiclesShared";
+import UserDialog from "./UserDialog";
+import { useState } from "react";
 
-export default function ShareButton({
-  user_id,
-  vehicle_id,
-}: {
-  user_id: string;
-  vehicle_id: number;
-}) {
+export default function ShareButton({ vehicle_id }: { vehicle_id: number }) {
+  const [open, setOpen] = useState(false);
+  const [snackbarStatus, setSnackbarStatus] = useState(false);
+
+  const handleClose = (value: string | null) => {
+    setOpen(false);
+
+    if (!value) return;
+
+    shareVehicle({
+      user_id: value,
+      vehicle_id,
+    });
+
+    setSnackbarStatus(true);
+  };
   return (
-    <Button
-      variant="contained"
-      size="small"
-      onClick={() =>
-        shareVehicle({
-          user_id: user_id,
-          vehicle_id: vehicle_id,
-        })
-      }
-    >
-      Share
-    </Button>
+    <>
+      <UserDialog open={open} onClose={handleClose} />
+      <Button variant="contained" size="small" onClick={() => setOpen(true)}>
+        Share
+      </Button>
+
+      <Snackbar
+        open={snackbarStatus}
+        autoHideDuration={3000}
+        message="Shared Vehicle Data with user"
+      />
+    </>
   );
 }

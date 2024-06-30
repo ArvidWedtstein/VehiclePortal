@@ -1,6 +1,5 @@
 "use server";
 
-import { getProfile } from "@/components/Lookups/Profiles/Profiles";
 import Stat from "@/components/Stat";
 import { createClient } from "@/utils/supabase/server";
 import { Avatar, Container, Grid } from "@mui/material";
