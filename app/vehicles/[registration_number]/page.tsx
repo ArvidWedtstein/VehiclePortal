@@ -72,11 +72,17 @@ export default async function VehiclePage({
     notFound();
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <Card variant="outlined" sx={{ mt: 3 }}>
       <CardContent>
         <Stack direction="row" spacing={2} my={2} alignItems={"center"}>
-          <ShareButton vehicle_id={vehicle.id} />
+          {vehicle.createdby_id === user?.id && (
+            <ShareButton vehicle_id={vehicle.id} />
+          )}
         </Stack>
         <Stack direction="row" spacing={2} alignItems={"center"}>
           <Chip

@@ -25,7 +25,7 @@ export default function ShareButton({ vehicle_id }: { vehicle_id: number }) {
     <>
       <UserDialog open={open} onClose={handleClose} />
       <Button variant="contained" size="small" onClick={() => setOpen(true)}>
-        Share
+        Share with...
       </Button>
 
       <Snackbar
